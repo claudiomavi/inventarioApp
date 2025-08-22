@@ -1,29 +1,36 @@
 import styled, { ThemeProvider } from 'styled-components'
 import {
 	AuthContextProvider,
-	ThemeContext,
+	ThemeContextProvider,
 	MyRoutes,
 	Light,
 	Dark,
 	Sidebar,
 	MenuHambur,
+	Login,
+	ToggleThemeContext,
 } from './autoBarrell'
 import { Device } from './styles/breackpoints'
 import { useState } from 'react'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { useLocation } from 'react-router-dom'
 
 export default function App() {
-	const [themeuse, setTheme] = useState('dark')
+	const { theme } = ToggleThemeContext()
+
 	const [sidebarOpen, setSidebarOpen] = useState(false)
 
-	const theme = themeuse === 'light' ? 'light' : 'dark'
+	const { pathname } = useLocation()
 
 	const themeStyle = theme === 'light' ? Light : Dark
 
 	return (
 		<>
-			<ThemeContext.Provider value={{ theme, setTheme }}>
-				<ThemeProvider theme={themeStyle}>
-					<AuthContextProvider>
+			<ThemeProvider theme={themeStyle}>
+				<AuthContextProvider>
+					{pathname === '/login' ? (
+						<Login />
+					) : (
 						<Container className={sidebarOpen ? 'active' : ''}>
 							<section className="ContentSidebar">
 								<Sidebar
@@ -38,9 +45,11 @@ export default function App() {
 								<MyRoutes />
 							</section>
 						</Container>
-					</AuthContextProvider>
-				</ThemeProvider>
-			</ThemeContext.Provider>
+					)}
+
+					<ReactQueryDevtools initialIsOpen={false} />
+				</AuthContextProvider>
+			</ThemeProvider>
 		</>
 	)
 }

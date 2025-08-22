@@ -8,14 +8,12 @@ export const AuthContextProvider = ({ children }) => {
 
 	useEffect(() => {
 		const { data: authListener } = supabase.auth.onAuthStateChange(
-			(event, session) => {
-				;async (event, session) => {
-					console.log(event, session)
-					if (session?.user === null) {
-						setUser(null)
-					} else {
-						setUser(session?.user)
-					}
+			async (event, session) => {
+				console.log(event, session)
+				if (session?.user == null) {
+					setUser(null)
+				} else {
+					setUser(session?.user)
 				}
 			}
 		)

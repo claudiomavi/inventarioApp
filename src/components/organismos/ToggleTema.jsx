@@ -1,12 +1,13 @@
 import styled from 'styled-components'
-import { useContext } from 'react'
-import { ThemeContext } from '../../autoBarrell'
+import { ToggleThemeContext } from '../../autoBarrell'
 
 export function ToggleTema() {
-	const { setTheme } = useContext(ThemeContext)
+	const { setTheme } = ToggleThemeContext()
+
 	const CambiarTheme = () => {
 		setTheme((theme) => (theme === 'light' ? 'dark' : 'light'))
 	}
+
 	return (
 		<Container>
 			<div className="container">
