@@ -1,13 +1,30 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home } from '../autoBarrell'
+import { Home, Login, ProtectedRoute, UserAuth } from '../autoBarrell'
 
 export function MyRoutes() {
+	const { user } = UserAuth()
+	console.log(user)
+
 	return (
 		<Routes>
 			<Route
-				path="/"
-				element={<Home />}
+				path="/login"
+				element={<Login />}
 			/>
+
+			<Route
+				element={
+					<ProtectedRoute
+						user={user}
+						redirectTo="/login"
+					/>
+				}
+			>
+				<Route
+					path="/"
+					element={<Home />}
+				/>
+			</Route>
 		</Routes>
 	)
 }
