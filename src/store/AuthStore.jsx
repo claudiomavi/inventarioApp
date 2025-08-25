@@ -1,13 +1,14 @@
 import { create } from 'zustand'
 import { supabase } from '../autoBarrell'
 
-export const useAuthStore = create((set, get) => ({
+export const useAuthStore = create(() => ({
 	signInWithEmail: async (p) => {
 		const { data, error } = await supabase.auth.signInWithPassword({
 			email: p.correo,
 			password: p.pass,
 		})
 		if (error) return null
+		return data
 	},
 	signOut: async () => {
 		const { error } = await supabase.auth.signOut()

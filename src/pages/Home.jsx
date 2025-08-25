@@ -1,8 +1,18 @@
-import styled from 'styled-components'
-import { HomeTemplate } from '../autoBarrell'
+import { useQuery } from '@tanstack/react-query'
+import { HomeTemplate, useEmpresaStore } from '../autoBarrell'
 
 export function Home() {
+	const { contarusuariosXempresa, dataempresa } = useEmpresaStore()
+
+	const { data } = useQuery({
+		queryKey: [
+			'contar usuarios por empresa',
+			{ idempresa: dataempresa.empresa?.id },
+		],
+		queryFn: () =>
+			contarusuariosXempresa({ id_empresa: dataempresa.empresa?.id }),
+		enabled: !!dataempresa,
+	})
+
 	return <HomeTemplate />
 }
-
-const Container = styled.div``

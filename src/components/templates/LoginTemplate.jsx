@@ -6,6 +6,7 @@ import {
 	InputText,
 	FooterLogin,
 	ToggleThemeContext,
+	RegistrarAdmin,
 } from '../../autoBarrell'
 import { Device } from '../../styles/breackpoints'
 import { useEffect, useState } from 'react'
@@ -17,20 +18,23 @@ import { MdOutlineInfo } from 'react-icons/md'
 
 export function LoginTemplate() {
 	const { setTheme } = ToggleThemeContext()
+	const { signInWithEmail } = useAuthStore()
+
+	const [state, setState] = useState(false)
+	const [stateInicio, setStateInicio] = useState(false)
+
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		setTheme('light')
 	}, [setTheme])
 
-	const { signInWithEmail } = useAuthStore()
-	const [state, setState] = useState(false)
-	const [stateInicio, setStateInicio] = useState(false)
-	const navigate = useNavigate()
 	const {
 		register,
 		formState: { errors },
 		handleSubmit,
 	} = useForm()
+
 	async function iniciar(data) {
 		const response = await signInWithEmail({
 			correo: data.correo,
@@ -55,6 +59,7 @@ export function LoginTemplate() {
 
 			<div className="contentCard">
 				<div className="card">
+					{state && <RegistrarAdmin setState={() => setState(!state)} />}
 					<Titulo>StockPRO</Titulo>
 					{stateInicio && (
 						<TextoStateInicio>datos incorrectos</TextoStateInicio>
@@ -71,9 +76,7 @@ export function LoginTemplate() {
 								className="form__field"
 								type="text"
 								placeholder="email"
-								{...register('correo', {
-									required: true,
-								})}
+								{...register('correo', { required: true })}
 							/>
 							<label className="form__label">email</label>
 							{errors.correo?.type === 'required' && <p>Campo requerido</p>}
@@ -83,9 +86,7 @@ export function LoginTemplate() {
 								className="form__field"
 								type="password"
 								placeholder="contraseña"
-								{...register('pass', {
-									required: true,
-								})}
+								{...register('pass', { required: true })}
 							/>
 							<label className="form__label">pass</label>
 							{errors.pass?.type === 'required' && <p>Campo requerido</p>}

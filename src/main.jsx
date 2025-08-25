@@ -8,7 +8,13 @@ import { ThemeContextProvider } from './autoBarrell.js'
 
 const queryClient = new QueryClient()
 
-createRoot(document.getElementById('root')).render(
+const container = document.getElementById('root')
+
+if (!container._root) {
+	container._root = createRoot(container)
+}
+
+container._root.render(
 	<StrictMode>
 		<BrowserRouter>
 			<ThemeContextProvider>

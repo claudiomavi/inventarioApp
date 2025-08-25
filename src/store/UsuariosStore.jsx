@@ -1,13 +1,12 @@
 import { create } from 'zustand'
-import { InsertarUsuarios, supabase } from '../autoBarrell'
+import { InsertarUsuarios, MostrarUsuarios, supabase } from '../autoBarrell'
 
-export const useUsuariosStore = create((set, get) => ({
+export const useUsuariosStore = create((set) => ({
 	insertarUsuarioAdmin: async (p) => {
 		const { data, error } = await supabase.auth.signUp({
 			email: p.correo,
 			password: p.pass,
 		})
-		console.log(data)
 		if (error) return
 		const datauser = await InsertarUsuarios({
 			idauth: data.user.id,
@@ -15,5 +14,11 @@ export const useUsuariosStore = create((set, get) => ({
 			tipouser: 'admin',
 		})
 		return datauser
+	},
+	idusuario: 0,
+	mostrarUsuarios: async () => {
+		const response = await MostrarUsuarios()
+		set({ idusuario: response.id })
+		return response
 	},
 }))

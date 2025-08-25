@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2'
-import { supabase } from '../autoBarrell'
+import { ObtenerIdAuthSupabase, supabase } from '../autoBarrell'
 
 export const InsertarUsuarios = async (p) => {
 	const { data, error } = await supabase
@@ -14,5 +14,16 @@ export const InsertarUsuarios = async (p) => {
 			text: 'Error al insertar usuario ' + error.message,
 		})
 	}
+	if (data) return data
+}
+
+export const MostrarUsuarios = async () => {
+	const idAuthSupabase = await ObtenerIdAuthSupabase()
+	const { data } = await supabase
+		.from('usuarios')
+		.select()
+		.eq('idauth', idAuthSupabase)
+		.maybeSingle()
+
 	if (data) return data
 }
