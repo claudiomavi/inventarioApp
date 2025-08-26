@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import {
+	Configuracion,
 	ErrorMolecula,
 	Home,
 	Login,
@@ -53,6 +54,10 @@ export function MyRoutes() {
 				<Route
 					path="/"
 					element={<Home />}
+				/>
+				<Route
+					path="/configurar"
+					element={<Configuracion />}
 				/>
 			</Route>
 		</Routes>

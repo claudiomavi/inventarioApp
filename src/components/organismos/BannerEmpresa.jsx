@@ -16,7 +16,7 @@ export function BannerEmpresa() {
 				<ContentCards>
 					<CardDatosEmpresa
 						titulo="Moneda"
-						valor={dataempresa.empresa?.simbolomoneda}
+						valor={dataempresa.empresa?.simbolomoneda ?? '-'}
 					/>
 					<CardDatosEmpresa
 						titulo="Usuarios"
