@@ -4,6 +4,7 @@ import {
 	ErrorMolecula,
 	Home,
 	Login,
+	Marca,
 	ProtectedRoute,
 	SpinnerLoader,
 	useEmpresaStore,
@@ -58,6 +59,10 @@ export function MyRoutes() {
 				<Route
 					path="/configurar"
 					element={<Configuracion />}
+				/>
+				<Route
+					path="/configurar/marca"
+					element={<Marca />}
 				/>
 			</Route>
 		</Routes>

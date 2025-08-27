@@ -1,4 +1,3 @@
-import Swal from 'sweetalert2'
 import { supabase } from '../autoBarrell'
 
 export const MostrarEmpresa = async (p) => {
