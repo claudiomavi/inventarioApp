@@ -1,20 +1,50 @@
 import styled from 'styled-components'
-import { Header } from '../../autoBarrell'
+import {
+	Btnfiltro,
+	ContentFiltro,
+	Header,
+	RegistrarMarca,
+	TablaMarca,
+	Title,
+} from '../../autoBarrell'
 import { useState } from 'react'
+import { v } from '../../styles/variables'
 
-export function MarcaTemplate() {
+export function MarcaTemplate({ data }) {
 	const [state, setState] = useState(false)
+	const [dataSelect, setDataSelect] = useState([])
+	const [accion, setAccion] = useState('')
+	const [openRegistro, setOpenRegistro] = useState(false)
 
 	return (
 		<Container>
+			{openRegistro && (
+				<RegistrarMarca
+					onClose={() => setOpenRegistro(!openRegistro)}
+					dataSelect={dataSelect}
+					accion={accion}
+				/>
+			)}
+
 			<header className="header">
 				<Header
 					stateConfig={{ state: state, setState: () => setState(!state) }}
 				/>
 			</header>
-			<section className="area1"></section>
+			<section className="area1">
+				<ContentFiltro>
+					<Title>Marcas</Title>
+					<Btnfiltro
+						bgcolor="#f6f3f3"
+						textcolor="#353535"
+						icono={<v.agregar />}
+					/>
+				</ContentFiltro>
+			</section>
 			<section className="area2"></section>
-			<section className="main"></section>
+			<section className="main">
+				<TablaMarca data={data} />
+			</section>
 		</Container>
 	)
 }
