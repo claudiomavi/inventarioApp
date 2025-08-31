@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 import {
 	Btnfiltro,
+	Buscador,
 	ContentFiltro,
 	Header,
 	RegistrarMarca,
 	TablaMarca,
 	Title,
+	useMarcaStore,
 } from '../../autoBarrell'
 import { useState } from 'react'
 import { v } from '../../styles/variables'
@@ -15,6 +17,14 @@ export function MarcaTemplate({ data }) {
 	const [dataSelect, setDataSelect] = useState([])
 	const [accion, setAccion] = useState('')
 	const [openRegistro, setOpenRegistro] = useState(false)
+
+	const { setBuscador } = useMarcaStore()
+
+	const nuevoRegistro = () => {
+		setOpenRegistro(!openRegistro)
+		setAccion('Nuevo')
+		setDataSelect([])
+	}
 
 	return (
 		<Container>
@@ -38,19 +48,27 @@ export function MarcaTemplate({ data }) {
 						bgcolor="#f6f3f3"
 						textcolor="#353535"
 						icono={<v.agregar />}
+						funcion={nuevoRegistro}
 					/>
 				</ContentFiltro>
 			</section>
-			<section className="area2"></section>
+			<section className="area2">
+				<Buscador setBuscador={setBuscador} />
+			</section>
 			<section className="main">
-				<TablaMarca data={data} />
+				<TablaMarca
+					data={data}
+					setOpenRegistro={setOpenRegistro}
+					setDataSelect={setDataSelect}
+					setAccion={setAccion}
+				/>
 			</section>
 		</Container>
 	)
 }
 
 const Container = styled.div`
-	height: 100vh;
+	min-height: 100vh;
 	width: 100%;
 	background-color: ${({ theme }) => theme.bgtotal};
 	color: ${({ theme }) => theme.text};
@@ -63,24 +81,25 @@ const Container = styled.div`
 		'main' auto;
 	.header {
 		grid-area: header;
-		background-color: blue;
+		/* background-color: blue; */
 		display: flex;
 		align-items: center;
 	}
 	.area1 {
 		grid-area: area1;
-		background-color: red;
+		/* background-color: red; */
 		display: flex;
 		align-items: center;
 	}
 	.area2 {
 		grid-area: area2;
-		background-color: green;
+		/* background-color: green; */
 		display: flex;
 		align-items: center;
+		justify-content: flex-end;
 	}
 	.main {
 		grid-area: main;
-		background-color: purple;
+		/* background-color: purple; */
 	}
 `

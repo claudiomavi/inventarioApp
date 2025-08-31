@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import styled from 'styled-components'
 import { v } from '../../../styles/variables'
 import {
@@ -6,6 +5,7 @@ import {
 	Btnsave,
 	useMarcaStore,
 	useEmpresaStore,
+	convertirCapitalize,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 
@@ -19,30 +19,25 @@ export function RegistrarMarca({ onClose, dataSelect, accion }) {
 		handleSubmit,
 	} = useForm()
 
-	async function insertar(data) {
+	const insertar = async (data) => {
 		if (accion === 'Editar') {
 			const p = {
 				id: dataSelect.id,
-				descripcion: data.nombre,
+				descripcion: convertirCapitalize(data.nombre),
 			}
 
 			await editarMarca(p)
 			onClose()
 		} else {
 			const p = {
-				_descripcion: data.nombre,
 				_idempresa: dataempresa.id,
+				_descripcion: convertirCapitalize(data.nombre),
 			}
 
 			await insertarMarca(p)
 			onClose()
 		}
 	}
-
-	useEffect(() => {
-		if (accion === 'Editar') {
-		}
-	}, [])
 
 	return (
 		<Container>

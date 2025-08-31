@@ -7,14 +7,36 @@ import {
 	useReactTable,
 } from '@tanstack/react-table'
 import styled from 'styled-components'
-import { ContentAccionesTabla, useMarcaStore } from '../../../autoBarrell'
+import {
+	ContentAccionesTabla,
+	Paginacion,
+	useMarcaStore,
+} from '../../../autoBarrell'
 import { v } from '../../../styles/variables'
 import Swal from 'sweetalert2'
+import { FaArrowsAltV } from 'react-icons/fa'
 
-export function TablaMarca({ data }) {
+export function TablaMarca({
+	data,
+	setOpenRegistro,
+	setDataSelect,
+	setAccion,
+}) {
 	const { eliminarMarca } = useMarcaStore()
 
-	const editar = () => {}
+	const editar = (p) => {
+		if (p.descripcion === 'Generica') {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Este registro no se puede modificar ya que es un valor por defecto...',
+			})
+			return
+		}
+		setOpenRegistro(true)
+		setDataSelect(p)
+		setAccion('Editar')
+	}
 
 	const eliminar = (p) => {
 		if (p.descripcion === 'Generica') {
@@ -45,11 +67,19 @@ export function TablaMarca({ data }) {
 		{
 			accessorKey: 'descripcion',
 			header: 'Descripcion',
-			cell: (info) => <span>{info.getValue()}</span>,
+			cell: (info) => (
+				<td
+					data-title="Descripcion"
+					className="content-cell"
+				>
+					<span>{info.getValue()}</span>
+				</td>
+			),
 		},
 		{
 			accessorKey: 'acciones',
 			header: '',
+			enableSorting: false,
 			cell: (info) => (
 				<td className="content-cell">
 					{
@@ -70,6 +100,7 @@ export function TablaMarca({ data }) {
 		getFilteredRowModel: getFilteredRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
+		initialState: { pagination: { pageSize: 5 } },
 	})
 
 	return (
@@ -79,7 +110,18 @@ export function TablaMarca({ data }) {
 					{table.getHeaderGroups().map((headerGroup) => (
 						<tr key={headerGroup.id}>
 							{headerGroup.headers.map((header) => (
-								<th key={header.id}>{header.column.columnDef.header}</th>
+								<th key={header.id}>
+									{header.column.columnDef.header}
+									{header.column.getCanSort() && (
+										<span
+											style={{ cursor: 'pointer' }}
+											onClick={header.column.getToggleSortingHandler()}
+										>
+											<FaArrowsAltV />
+										</span>
+									)}
+									{{ asc: '🔼', desc: '🔽' }[header.column.getIsSorted()]}
+								</th>
 							))}
 						</tr>
 					))}
@@ -96,6 +138,12 @@ export function TablaMarca({ data }) {
 					))}
 				</tbody>
 			</table>
+			<Paginacion
+				table={table}
+				irinicio={() => table.setPageIndex(0)}
+				pagina={table.getState().pagination.pageIndex + 1}
+				maximo={table.getPageCount()}
+			/>
 		</Container>
 	)
 }
