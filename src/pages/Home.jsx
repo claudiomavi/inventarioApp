@@ -5,12 +5,8 @@ export function Home() {
 	const { contarusuariosXempresa, dataempresa } = useEmpresaStore()
 
 	const { data } = useQuery({
-		queryKey: [
-			'contar usuarios por empresa',
-			{ idempresa: dataempresa.empresa?.id },
-		],
-		queryFn: () =>
-			contarusuariosXempresa({ id_empresa: dataempresa.empresa?.id }),
+		queryKey: ['contar usuarios por empresa', { idempresa: dataempresa?.id }],
+		queryFn: () => contarusuariosXempresa({ id_empresa: dataempresa?.id }),
 		enabled: !!dataempresa,
 	})
 

@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import {
+	Categorias,
 	Configuracion,
 	ErrorMolecula,
 	Home,
@@ -63,6 +64,10 @@ export function MyRoutes() {
 				<Route
 					path="/configurar/marca"
 					element={<Marca />}
+				/>
+				<Route
+					path="/configurar/categorias"
+					element={<Categorias />}
 				/>
 			</Route>
 		</Routes>

@@ -20,7 +20,7 @@ export function PlantillaBase() {
 }
 
 const Container = styled.div`
-	height: 100vh;
+	min-height: 100vh;
 	width: 100%;
 	background-color: ${({ theme }) => theme.bgtotal};
 	color: ${({ theme }) => theme.text};
