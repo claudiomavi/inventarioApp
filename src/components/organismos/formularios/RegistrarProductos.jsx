@@ -3,18 +3,26 @@ import { v } from '../../../styles/variables'
 import {
 	InputText,
 	Btnsave,
-	useCategoriasStore,
+	useProductosStore,
 	useEmpresaStore,
 	convertirCapitalize,
+	ContainerSelector,
+	Selector,
+	useMarcaStore,
+	Btnfiltro,
+	RegistrarMarca,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
-import { CirclePicker } from 'react-color'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-export function RegistrarCategorias({ onClose, dataSelect, accion }) {
-	const [currentColor, setCurrentColor] = useState('#f44336')
-	const { insertarCategorias, editarCategorias } = useCategoriasStore()
+export function RegistrarProductos({ onClose, dataSelect, accion }) {
+	const [stateMarca, setStateMarca] = useState(false)
+	const [openRegistroMarca, setOpenRegistroMarca] = useState(false)
+	const [subaccion, setSubaccion] = useState('')
+
+	const { insertarProductos, editarProductos } = useProductosStore()
 	const { dataempresa } = useEmpresaStore()
+	const { marcaItemSelect } = useMarcaStore()
 
 	const {
 		register,
@@ -22,37 +30,30 @@ export function RegistrarCategorias({ onClose, dataSelect, accion }) {
 		handleSubmit,
 	} = useForm()
 
-	const elegirColor = (color) => {
-		setCurrentColor(color.hex)
-	}
-
 	const insertar = async (data) => {
 		if (accion === 'Editar') {
 			const p = {
 				id: dataSelect.id,
 				descripcion: convertirCapitalize(data.nombre),
-				color: currentColor,
 			}
 
-			await editarCategorias(p)
+			await editarProductos(p)
 			onClose()
 		} else {
 			const p = {
 				_idempresa: dataempresa.id,
 				_descripcion: convertirCapitalize(data.nombre),
-				_color: currentColor,
 			}
 
-			await insertarCategorias(p)
+			await insertarProductos(p)
 			onClose()
 		}
 	}
 
-	useEffect(() => {
-		if (accion === 'Editar') {
-			setCurrentColor(dataSelect.color)
-		}
-	}, [])
+	const nuevoRegistroMarca = () => {
+		setOpenRegistroMarca(!openRegistroMarca)
+		setSubaccion('Nuevo')
+	}
 
 	return (
 		<Container>
@@ -61,8 +62,8 @@ export function RegistrarCategorias({ onClose, dataSelect, accion }) {
 					<section>
 						<h1>
 							{accion == 'Editar'
-								? 'Editar categoria'
-								: 'Registrar nueva categoria'}
+								? 'Editar productos'
+								: 'Registrar nuevo producto'}
 						</h1>
 					</section>
 
@@ -77,7 +78,7 @@ export function RegistrarCategorias({ onClose, dataSelect, accion }) {
 				>
 					<section>
 						<article>
-							<InputText icono={<v.iconocategorias />}>
+							<InputText icono={<v.icononombre />}>
 								<input
 									className="form__field"
 									defaultValue={dataSelect.descripcion}
@@ -87,16 +88,26 @@ export function RegistrarCategorias({ onClose, dataSelect, accion }) {
 										required: true,
 									})}
 								/>
-								<label className="form__label">categorias</label>
+								<label className="form__label">descripcion</label>
 								{errors.nombre?.type === 'required' && <p>Campo requerido</p>}
 							</InputText>
 						</article>
-						<article className="colorContainer">
-							<CirclePicker
-								onChange={elegirColor}
-								color={currentColor}
+						<ContainerSelector>
+							<label>Marca: </label>
+							<Selector
+								color="#fc6027"
+								// texto1="🍿"
+								texto2={marcaItemSelect?.descripcion}
+								state={stateMarca}
+								funcion={() => setStateMarca(!stateMarca)}
 							/>
-						</article>
+							<Btnfiltro
+								bgcolor="#f6f3f3"
+								textcolor="#353535"
+								icono={<v.agregar />}
+								funcion={nuevoRegistroMarca}
+							/>
+						</ContainerSelector>
 
 						<div className="btnguardarContent">
 							<Btnsave
@@ -107,6 +118,13 @@ export function RegistrarCategorias({ onClose, dataSelect, accion }) {
 						</div>
 					</section>
 				</form>
+				{openRegistroMarca && (
+					<RegistrarMarca
+						dataSelect={dataSelect}
+						onClose={() => setOpenRegistroMarca(!openRegistroMarca)}
+						accion={subaccion}
+					/>
+				)}
 			</div>
 		</Container>
 	)

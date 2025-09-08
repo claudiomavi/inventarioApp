@@ -8,25 +8,24 @@ import {
 } from '@tanstack/react-table'
 import styled from 'styled-components'
 import {
-	ColorContent,
 	ContentAccionesTabla,
 	Paginacion,
-	useCategoriasStore,
+	useProductosStore,
 } from '../../../autoBarrell'
 import { v } from '../../../styles/variables'
 import Swal from 'sweetalert2'
 import { FaArrowsAltV } from 'react-icons/fa'
 
-export function TablaCategorias({
+export function TablaProductos({
 	data,
 	setOpenRegistro,
 	setDataSelect,
 	setAccion,
 }) {
-	const { eliminarCategorias } = useCategoriasStore()
+	const { eliminarProductos } = useProductosStore()
 
 	const editar = (p) => {
-		if (p.descripcion === 'General') {
+		if (p.descripcion === 'Generico') {
 			Swal.fire({
 				icon: 'error',
 				title: 'Oops...',
@@ -40,7 +39,7 @@ export function TablaCategorias({
 	}
 
 	const eliminar = (p) => {
-		if (p.descripcion === 'General') {
+		if (p.descripcion === 'Generico') {
 			Swal.fire({
 				icon: 'error',
 				title: 'Oops...',
@@ -59,7 +58,7 @@ export function TablaCategorias({
 			cancelButtonText: 'Cancelar',
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				await eliminarCategorias({ id: p.id })
+				await eliminarProductos({ id: p.id })
 			}
 		})
 	}
@@ -74,23 +73,6 @@ export function TablaCategorias({
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'color',
-			header: 'Color',
-			enableSorting: false,
-			cell: (info) => (
-				<td
-					data-title="Color"
-					className="content-cell"
-				>
-					<ColorContent
-						$color={info.getValue()}
-						$alto="25px"
-						$ancho="25px"
-					/>
 				</td>
 			),
 		},
