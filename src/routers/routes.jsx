@@ -6,6 +6,7 @@ import {
 	Home,
 	Login,
 	Marca,
+	Productos,
 	ProtectedRoute,
 	SpinnerLoader,
 	useEmpresaStore,
@@ -68,6 +69,10 @@ export function MyRoutes() {
 				<Route
 					path="/configurar/categorias"
 					element={<Categorias />}
+				/>
+				<Route
+					path="/configurar/productos"
+					element={<Productos />}
 				/>
 			</Route>
 		</Routes>
