@@ -14,11 +14,7 @@ export const InsertarProductos = async (p) => {
 }
 
 export const MostrarProductos = async (p) => {
-	const { data } = await supabase
-		.from('productos')
-		.select()
-		.eq('id_empresa', p.id_empresa)
-		.order('id', { ascending: true })
+	const { data } = await supabase.rpc('mostrarproductos', p)
 
 	return data
 }

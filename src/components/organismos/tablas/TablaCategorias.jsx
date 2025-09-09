@@ -12,8 +12,8 @@ import {
 	ContentAccionesTabla,
 	Paginacion,
 	useCategoriasStore,
+	v,
 } from '../../../autoBarrell'
-import { v } from '../../../styles/variables'
 import Swal from 'sweetalert2'
 import { FaArrowsAltV } from 'react-icons/fa'
 

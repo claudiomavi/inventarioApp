@@ -8,9 +8,9 @@ import {
 	TablaProductos,
 	Title,
 	useProductosStore,
+	v,
 } from '../../autoBarrell'
 import { useState } from 'react'
-import { v } from '../../styles/variables'
 
 export function ProductosTemplate({ data }) {
 	const [state, setState] = useState(false)

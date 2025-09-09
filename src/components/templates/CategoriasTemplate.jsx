@@ -8,9 +8,9 @@ import {
 	TablaCategorias,
 	Title,
 	useCategoriasStore,
+	v,
 } from '../../autoBarrell'
 import { useState } from 'react'
-import { v } from '../../styles/variables'
 
 export function CategoriasTemplate({ data }) {
 	const [state, setState] = useState(false)

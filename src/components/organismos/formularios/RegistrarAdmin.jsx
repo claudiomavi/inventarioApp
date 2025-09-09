@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { v } from '../../../styles/variables'
-import { InputText, Btnsave, useUsuariosStore } from '../../../autoBarrell'
+import { InputText, Btnsave, useUsuariosStore, v } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { MdAlternateEmail } from 'react-icons/md'
 import { RiLockPasswordLine } from 'react-icons/ri'

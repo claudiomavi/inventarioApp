@@ -8,9 +8,9 @@ import {
 	TablaMarca,
 	Title,
 	useMarcaStore,
+	v,
 } from '../../autoBarrell'
 import { useState } from 'react'
-import { v } from '../../styles/variables'
 
 export function MarcaTemplate({ data }) {
 	const [state, setState] = useState(false)

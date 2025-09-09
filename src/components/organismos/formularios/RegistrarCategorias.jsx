@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import { v } from '../../../styles/variables'
 import {
 	InputText,
 	Btnsave,
 	useCategoriasStore,
 	useEmpresaStore,
 	convertirCapitalize,
+	v,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { CirclePicker } from 'react-color'

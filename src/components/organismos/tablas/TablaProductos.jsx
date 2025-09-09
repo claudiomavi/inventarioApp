@@ -8,11 +8,13 @@ import {
 } from '@tanstack/react-table'
 import styled from 'styled-components'
 import {
+	ColorContent,
+	ColorContentTable,
 	ContentAccionesTabla,
 	Paginacion,
 	useProductosStore,
+	v,
 } from '../../../autoBarrell'
-import { v } from '../../../styles/variables'
 import Swal from 'sweetalert2'
 import { FaArrowsAltV } from 'react-icons/fa'
 
@@ -73,6 +75,68 @@ export function TablaProductos({
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
+				</td>
+			),
+		},
+		{
+			accessorKey: 'stock',
+			header: 'Stock',
+			cell: (info) => (
+				<td
+					data-title="Stock"
+					className="content-cell"
+				>
+					<span>{info.getValue()}</span>
+				</td>
+			),
+		},
+		{
+			accessorKey: 'precioventa',
+			header: 'P. Venta',
+			cell: (info) => (
+				<td
+					data-title="P. Venta"
+					className="content-cell"
+				>
+					<span>{info.getValue()}</span>
+				</td>
+			),
+		},
+		{
+			accessorKey: 'preciocompra',
+			header: 'P. Compra',
+			cell: (info) => (
+				<td
+					data-title="P. Compra"
+					className="content-cell"
+				>
+					<span>{info.getValue()}</span>
+				</td>
+			),
+		},
+		{
+			accessorKey: 'categoria',
+			header: 'Categoria',
+			cell: (info) => (
+				<td
+					data-title="Categoria"
+					className="content-cell"
+				>
+					<ColorContentTable $color={info.row.original.color}>
+						{info.getValue() || 'Cargando...'}
+					</ColorContentTable>
+				</td>
+			),
+		},
+		{
+			accessorKey: 'marca',
+			header: 'Marca',
+			cell: (info) => (
+				<td
+					data-title="Marca"
+					className="content-cell"
+				>
+					<span>{info.getValue() || 'Cargando...'}</span>
 				</td>
 			),
 		},

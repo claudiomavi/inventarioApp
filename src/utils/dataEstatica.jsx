@@ -1,4 +1,4 @@
-import { v } from '../styles/variables'
+import { v } from '../autoBarrell'
 import { AiOutlineHome, AiOutlineSetting } from 'react-icons/ai'
 
 export const DesplegableUser = [

@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import { v } from '../../../styles/variables'
 import {
 	InputText,
 	Btnsave,
 	useMarcaStore,
 	useEmpresaStore,
 	convertirCapitalize,
+	v,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 

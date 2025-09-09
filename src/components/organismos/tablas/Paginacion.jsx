@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { v } from '../../../styles/variables'
+import { v } from '../../../autoBarrell'
 
 export function Paginacion({ table, irinicio, pagina, maximo }) {
 	return (

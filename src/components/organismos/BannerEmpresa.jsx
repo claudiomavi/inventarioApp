@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { v } from '../../styles/variables'
-import { CardDatosEmpresa, useEmpresaStore } from '../../autoBarrell'
+import { CardDatosEmpresa, useEmpresaStore, v } from '../../autoBarrell'
 
 export function BannerEmpresa() {
 	const { dataempresa, contadorusuarios } = useEmpresaStore()

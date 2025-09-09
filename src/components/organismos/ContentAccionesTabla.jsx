@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { AccionTabla } from '../../autoBarrell'
-import { v } from '../../styles/variables'
+import { AccionTabla, v } from '../../autoBarrell'
 
 export function ContentAccionesTabla({ funcionEditar, funcionEliminar }) {
 	return (

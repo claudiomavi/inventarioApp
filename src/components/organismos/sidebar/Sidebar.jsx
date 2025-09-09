@@ -4,8 +4,8 @@ import {
 	SecondarylinksArray,
 	SidebarCard,
 	ToggleTema,
+	v,
 } from '../../../autoBarrell'
-import { v } from '../../../styles/variables'
 import { NavLink } from 'react-router-dom'
 
 export function Sidebar({ state, setState }) {
