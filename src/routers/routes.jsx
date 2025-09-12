@@ -6,6 +6,7 @@ import {
 	Home,
 	Login,
 	Marca,
+	Usuarios,
 	Productos,
 	ProtectedRoute,
 	SpinnerLoader,
@@ -17,7 +18,7 @@ import { useQuery } from '@tanstack/react-query'
 
 export function MyRoutes() {
 	const { user } = UserAuth()
-	const { mostrarUsuarios, idusuario } = useUsuariosStore()
+	const { mostrarUsuarios, idusuario, mostrarPermisos } = useUsuariosStore()
 	const { mostrarEmpresa } = useEmpresaStore()
 
 	const {
@@ -29,9 +30,15 @@ export function MyRoutes() {
 		queryFn: mostrarUsuarios,
 	})
 
-	const { data: dataempresa } = useQuery({
+	const { data: _dataempresa } = useQuery({
 		queryKey: ['mostrar empresa'],
 		queryFn: () => mostrarEmpresa({ idusuario }),
+		enabled: !!datausuarios,
+	})
+
+	const { data: _datapermisos } = useQuery({
+		queryKey: ['mostrar permisos', { id_usuario: idusuario }],
+		queryFn: () => mostrarPermisos({ id_usuario: idusuario }),
 		enabled: !!datausuarios,
 	})
 
@@ -73,6 +80,10 @@ export function MyRoutes() {
 				<Route
 					path="/configurar/productos"
 					element={<Productos />}
+				/>
+				<Route
+					path="/configurar/personal"
+					element={<Usuarios />}
 				/>
 			</Route>
 		</Routes>
