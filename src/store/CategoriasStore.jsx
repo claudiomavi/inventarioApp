@@ -59,5 +59,6 @@ export const useCategoriasStore = create((set, get) => ({
 		const response = await BuscarCategorias(p)
 
 		set({ datacategorias: response })
+		return response
 	},
 }))

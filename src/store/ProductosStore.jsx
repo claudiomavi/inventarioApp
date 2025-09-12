@@ -59,5 +59,6 @@ export const useProductosStore = create((set, get) => ({
 		const response = await BuscarProductos(p)
 
 		set({ dataproductos: response })
+		return response
 	},
 }))
