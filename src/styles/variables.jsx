@@ -38,6 +38,9 @@ import { TbBrandBitbucket } from 'react-icons/tb'
 import { MdOutlineCategory } from 'react-icons/md'
 import { FaBuilding } from 'react-icons/fa'
 import { TbReportAnalytics } from 'react-icons/tb'
+import { MdOutlinePhoneInTalk } from 'react-icons/md'
+import { GoNumber } from 'react-icons/go'
+import { FaHouseUser } from 'react-icons/fa'
 
 export const v = {
 	iconoreportes: TbReportAnalytics,
@@ -49,6 +52,9 @@ export const v = {
 	iconocodigointerno: DiCodepen,
 	iconocodigobarras: AiOutlineBarcode,
 	iconostockminimo: BiBellMinus,
+	iconotelefono: MdOutlinePhoneInTalk,
+	icononrodoc: GoNumber,
+	iconodireccion: FaHouseUser,
 	iconostock: RiStockLine,
 	icononombre: MdDriveFileRenameOutline,
 	iconoemail: MdAlternateEmail,
