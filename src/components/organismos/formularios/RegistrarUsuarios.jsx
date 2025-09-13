@@ -6,7 +6,7 @@ import {
 	useEmpresaStore,
 	ContainerSelector,
 	Selector,
-	v,
+	v as _v,
 	ListaGenerica,
 	Device,
 	TipoDocData,
@@ -14,7 +14,8 @@ import {
 	ListaModulos,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 	const [tipoDoc, setTipoDoc] = useState({ icono: '', descripcion: 'otros' })
@@ -26,8 +27,14 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 	const [stateTipoUser, setStateTipoUser] = useState(false)
 	const [checkbox, setCheckbox] = useState([])
 
-	const { insertarUsuarios, editarUsuarios } = useUsuariosStore()
+	const { insertarUsuarios, editarUsuarios, mostrarPermisosEditando } =
+		useUsuariosStore()
 	const { dataempresa } = useEmpresaStore()
+
+	const { isLoading } = useQuery({
+		queryKey: ['mostrar usuario editando', { id_usuario: dataSelect.id }],
+		queryFn: () => mostrarPermisosEditando({ id_usuario: dataSelect.id }),
+	})
 
 	const {
 		register,
@@ -38,22 +45,24 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 	const insertar = async (data) => {
 		if (accion === 'Editar') {
 			const p = {
+				id: dataSelect.id,
 				nombres: data.nombres,
 				correo: data.correo,
-				nro_doc: data.nrodoc,
+				nro_doc: data.nro_doc,
 				telefono: data.telefono,
 				direccion: data.direccion,
 				tipouser: tipoUser.descripcion,
 				tipodoc: tipoDoc.descripcion,
 			}
 
-			await editarUsuarios(p)
+			await editarUsuarios(p, checkbox, dataempresa.id)
 			onClose()
 		} else {
 			const p = {
+				id: dataSelect.id,
 				nombres: data.nombres,
 				correo: data.correo,
-				nro_doc: data.nrodoc,
+				nro_doc: data.nro_doc,
 				telefono: data.telefono,
 				direccion: data.direccion,
 				tipouser: tipoUser.descripcion,
@@ -70,6 +79,15 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 			onClose()
 		}
 	}
+
+	useEffect(() => {
+		if (accion === 'Editar') {
+			setTipoDoc({ icono: '', descripcion: dataSelect.tipodoc })
+			setTipoUser({ icono: '', descripcion: dataSelect.tipouser })
+		}
+	}, [])
+
+	if (isLoading) return <span>cargando...</span>
 
 	return (
 		<Container>
@@ -94,9 +112,12 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 				>
 					<section className="seccionIzquierda">
 						<article>
-							<InputText icono={<v.iconoemail />}>
+							<InputText icono={<_v.iconoemail />}>
 								<input
-									className="form__field"
+									disabled={accion === 'Editar' && true}
+									className={
+										accion === 'Editar' ? 'form__field disabled' : 'form__field'
+									}
 									defaultValue={dataSelect.correo}
 									type="text"
 									placeholder=""
@@ -108,26 +129,33 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 								{errors.correo?.type === 'required' && <p>Campo requerido</p>}
 							</InputText>
 						</article>
+						{accion !== 'Editar' && (
+							<article>
+								<InputText icono={<_v.iconopass />}>
+									<input
+										className="form__field"
+										defaultValue={dataSelect.pass}
+										type="text"
+										placeholder=""
+										{...register('pass', {
+											required: true,
+											minLength: 8,
+										})}
+									/>
+									<label className="form__label">password</label>
+									{errors.pass?.type === 'required' && <p>Campo requerido</p>}
+									{errors.pass?.type === 'minLength' && (
+										<p>minimo 8 caracteres</p>
+									)}
+								</InputText>
+							</article>
+						)}
+
 						<article>
-							<InputText icono={<v.iconopass />}>
+							<InputText icono={<_v.icononombre />}>
 								<input
 									className="form__field"
-									defaultValue={dataSelect.pass}
-									type="text"
-									placeholder=""
-									{...register('pass', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">password</label>
-								{errors.pass?.type === 'required' && <p>Campo requerido</p>}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<v.icononombre />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.icononombre}
+									defaultValue={dataSelect.nombres}
 									type="text"
 									placeholder=""
 									{...register('nombres', {
@@ -156,7 +184,7 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 							)}
 						</ContainerSelector>
 						<article>
-							<InputText icono={<v.icononrodoc />}>
+							<InputText icono={<_v.icononrodoc />}>
 								<input
 									className="form__field"
 									defaultValue={dataSelect.nro_doc}
@@ -171,7 +199,7 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 							</InputText>
 						</article>
 						<article>
-							<InputText icono={<v.iconotelefono />}>
+							<InputText icono={<_v.iconotelefono />}>
 								<input
 									className="form__field"
 									defaultValue={dataSelect.telefono}
@@ -186,7 +214,7 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 							</InputText>
 						</article>
 						<article>
-							<InputText icono={<v.iconodireccion />}>
+							<InputText icono={<_v.iconodireccion />}>
 								<input
 									className="form__field"
 									defaultValue={dataSelect.direccion}
@@ -232,7 +260,7 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 
 					<div className="btnguardarContent">
 						<Btnsave
-							icono={<v.iconoguardar />}
+							icono={<_v.iconoguardar />}
 							titulo="Guardar"
 							bgcolor="#ef552b"
 						/>

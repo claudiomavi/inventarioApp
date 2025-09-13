@@ -3,20 +3,18 @@ import { useUsuariosStore } from '../../autoBarrell'
 import { useEffect, useState } from 'react'
 
 export function ListaModulos({ checkbox, setCheckbox, accion }) {
-	const [isChecked, setIsChecked] = useState(true)
+	const [_isChecked, setIsChecked] = useState(true)
 
-	const { datamodulos, datapermisos } = useUsuariosStore()
+	const { datamodulos, datapermisosedit } = useUsuariosStore()
 
 	useEffect(() => {
 		if (accion === 'Editar') {
 			let allDocs = []
 
 			datamodulos.map((item) => {
-				const statePermiso = datapermisos?.some(
-					(objeto) => objeto.modulos.nombre
+				const statePermiso = datapermisosedit?.some((objeto) =>
+					objeto.modulos.nombre.includes(item.nombre)
 				)
-
-				console.log(statePermiso)
 
 				if (statePermiso) {
 					allDocs.push({ ...item, check: true })
@@ -29,13 +27,13 @@ export function ListaModulos({ checkbox, setCheckbox, accion }) {
 		} else {
 			setCheckbox(datamodulos)
 		}
-	}, [])
+	}, [datapermisosedit])
 
 	const handleCheckBox = (id) => {
 		setCheckbox((prev) => {
 			return prev?.map((item) => {
 				if (item.id === id) {
-					return { ...item, check: !item.checked }
+					return { ...item, check: !item.check }
 				} else {
 					return { ...item }
 				}
@@ -99,7 +97,6 @@ const Container = styled.div`
 			font-size: 35px;
 			transition: all 0.2s ease-in-out;
 		}
-
 		&:checked {
 			border: 2px solid rgb(255, 212, 59);
 			background: linear-gradient(

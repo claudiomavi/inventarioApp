@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { DataModulosConfiguracion } from '../../autoBarrell'
+import { DataModulosConfiguracion, MensajeNoPermiso } from '../../autoBarrell'
 
 export function ConfiguracionTemplate() {
 	return (
@@ -43,10 +43,12 @@ export function ConfiguracionTemplate() {
 				{DataModulosConfiguracion.map((item, index) => {
 					return (
 						<Link
-							to={item.link}
+							to={item.state ? item.link : ''}
 							className={item.state ? 'card' : 'card false'}
 							key={index}
 						>
+							<MensajeNoPermiso state={item.state} />
+							{console.log(item)}
 							<div className="card-content">
 								<div className="card-image">
 									<img src={item.icono} />

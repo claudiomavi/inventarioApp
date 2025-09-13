@@ -1,14 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 import {
+	BloqueoPagina,
 	MarcaTemplate,
 	SpinnerLoader,
 	useEmpresaStore,
 	useMarcaStore,
+	useUsuariosStore,
 } from '../autoBarrell'
 
 export function Marca() {
 	const { mostrarMarca, datamarca, buscarMarca, buscador } = useMarcaStore()
 	const { dataempresa } = useEmpresaStore()
+	const { datapermisos } = useUsuariosStore()
+
+	const statePermiso = datapermisos.some((item) =>
+		item.modulos.nombre.includes('Marca de productos')
+	)
 
 	const { isLoading, error } = useQuery({
 		queryKey: ['mostrar marca', { id_empresa: dataempresa?.id }],
@@ -16,7 +23,7 @@ export function Marca() {
 		enabled: dataempresa?.id != null,
 	})
 
-	const { data: buscardata } = useQuery({
+	const { data: _buscardata } = useQuery({
 		queryKey: [
 			'buscar marca',
 			{ id_empresa: dataempresa.id, descripcion: buscador },
@@ -25,6 +32,8 @@ export function Marca() {
 			buscarMarca({ id_empresa: dataempresa.id, descripcion: buscador }),
 		enabled: dataempresa.id != null,
 	})
+
+	if (!statePermiso) return <BloqueoPagina state={statePermiso} />
 
 	if (isLoading) return <SpinnerLoader />
 

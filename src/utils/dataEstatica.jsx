@@ -97,22 +97,26 @@ export const TipouserData = [
 		icono: '🪖',
 	},
 	{
-		descripcion: 'administrador',
+		descripcion: 'admin',
 		icono: '👑',
 	},
 ]
 //tipodoc
 export const TipoDocData = [
 	{
-		descripcion: 'Dni',
+		descripcion: 'dni',
 		icono: '🪖',
 	},
 	{
-		descripcion: 'Libreta electoral',
+		descripcion: 'nie',
 		icono: '👑',
 	},
 	{
-		descripcion: 'Otros',
+		descripcion: 'cif',
+		icono: '👑',
+	},
+	{
+		descripcion: 'otros',
 		icono: '👑',
 	},
 ]

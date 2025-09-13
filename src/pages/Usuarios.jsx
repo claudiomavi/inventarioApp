@@ -4,35 +4,46 @@ import {
 	SpinnerLoader,
 	useEmpresaStore,
 	useUsuariosStore,
-	useMarcaStore,
+	BloqueoPagina,
 } from '../autoBarrell'
 
 export function Usuarios() {
-	const { mostrarUsuarios, datausuarios, buscador, mostrarModulos } =
-		useUsuariosStore()
-	const { buscarMarca } = useMarcaStore()
+	const {
+		mostrarUsuariosTodos,
+		buscarUsuarios,
+		datausuarios,
+		buscador,
+		mostrarModulos,
+		datapermisos,
+	} = useUsuariosStore()
 	const { dataempresa } = useEmpresaStore()
 
+	const statePermiso = datapermisos.some((item) =>
+		item.modulos.nombre.includes('Marca de productos')
+	)
+
 	const { isLoading, error } = useQuery({
-		queryKey: ['mostrar usuarios', { id_empresa: dataempresa?.id }],
-		queryFn: () => mostrarUsuarios({ id_empresa: dataempresa?.id }),
+		queryKey: ['mostrar usuarios todos'],
+		queryFn: () => mostrarUsuariosTodos({ _id_empresa: dataempresa?.id }),
 		enabled: dataempresa?.id != null,
 	})
 
-	const { data: buscardata } = useQuery({
+	const { data: _buscarusuarios } = useQuery({
 		queryKey: [
-			'buscar Marca',
-			{ id_empresa: dataempresa.id, descripcion: buscador },
+			'buscar usuarios',
+			{ _id_empresa: dataempresa?.id, buscador: buscador },
 		],
 		queryFn: () =>
-			buscarMarca({ id_empresa: dataempresa.id, descripcion: buscador }),
+			buscarUsuarios({ _id_empresa: dataempresa?.id, buscador: buscador }),
 		enabled: dataempresa.id != null,
 	})
 
-	const { data: datamodulos } = useQuery({
+	const { data: _datamodulos } = useQuery({
 		queryKey: ['mostrar modulos'],
 		queryFn: mostrarModulos,
 	})
+
+	if (!statePermiso) return <BloqueoPagina state={statePermiso} />
 
 	if (isLoading) return <SpinnerLoader />
 

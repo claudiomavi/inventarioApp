@@ -51,11 +51,7 @@ export const EditarUsuarios = async (p) => {
 }
 
 export const BuscarUsuarios = async (p) => {
-	const { data } = await supabase
-		.from('usuarios')
-		.select()
-		.eq('id_empresa', p.id_empresa)
-		.ilike('descripcion', '%' + p.descripcion + '%')
+	const { data } = await supabase.rpc('buscarpersonal', p)
 
 	return data
 }

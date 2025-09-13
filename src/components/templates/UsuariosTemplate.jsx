@@ -5,10 +5,10 @@ import {
 	ContentFiltro,
 	Header,
 	RegistrarUsuarios,
-	TablaProductos,
+	TablaUsuarios,
 	Title,
 	useUsuariosStore,
-	v,
+	v as _v,
 } from '../../autoBarrell'
 import { useState } from 'react'
 
@@ -47,7 +47,7 @@ export function UsuariosTemplate({ data }) {
 					<Btnfiltro
 						bgcolor="#f6f3f3"
 						textcolor="#353535"
-						icono={<v.agregar />}
+						icono={<_v.agregar />}
 						funcion={nuevoRegistro}
 					/>
 				</ContentFiltro>
@@ -56,7 +56,7 @@ export function UsuariosTemplate({ data }) {
 				<Buscador setBuscador={setBuscador} />
 			</section>
 			<section className="main">
-				<TablaProductos
+				<TablaUsuarios
 					data={data}
 					setOpenRegistro={setOpenRegistro}
 					setDataSelect={setDataSelect}

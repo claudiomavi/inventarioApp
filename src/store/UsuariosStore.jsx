@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 import {
 	BuscarUsuarios,
+	DataModulosConfiguracion,
 	EditarUsuarios,
+	EliminarPermisos,
 	EliminarUsuarios,
 	InsertarAsignaciones,
 	InsertarPermisos,
@@ -17,10 +19,16 @@ export const useUsuariosStore = create((set, get) => ({
 	datausuarios: [],
 	datamodulos: [],
 	datapermisos: [],
+	datapermisosedit: [],
 
 	usuariosItemSelect: [],
 	parametros: {},
 	idusuario: 0,
+
+	buscador: '',
+	setBuscador: (p) => {
+		set({ buscador: p })
+	},
 
 	insertarUsuarioAdmin: async (p) => {
 		const { data, error } = await supabase.auth.signUp({
@@ -40,10 +48,6 @@ export const useUsuariosStore = create((set, get) => ({
 		const response = await MostrarUsuarios()
 		set({ idusuario: response.id })
 		return response
-	},
-	buscador: '',
-	setBuscador: (p) => {
-		set({ buscador: p })
 	},
 
 	mostrarUsuariosTodos: async (p) => {
@@ -69,7 +73,7 @@ export const useUsuariosStore = create((set, get) => ({
 
 		const dataUserNew = await InsertarUsuarios({
 			nombres: p.nombres,
-			nro_doc: p.nrodoc,
+			nro_doc: p.nro_doc,
 			telefono: p.telefono,
 			direccion: p.direccion,
 			fecharegistro: new Date(),
@@ -77,6 +81,7 @@ export const useUsuariosStore = create((set, get) => ({
 			idauth: data.user.id,
 			tipouser: p.tipouser,
 			tipodoc: p.tipodoc,
+			correo: p.correo,
 		})
 
 		await InsertarAsignaciones({
@@ -105,12 +110,22 @@ export const useUsuariosStore = create((set, get) => ({
 		set(mostrarUsuarios(parametros))
 	},
 
-	editarUsuarios: async (p) => {
+	editarUsuarios: async (p, datacheckpermisos, id_empresa) => {
 		await EditarUsuarios(p)
+		await EliminarPermisos({ id_usuario: p.id })
 
-		const { mostrarUsuarios } = get()
-		const { parametros } = get()
-		set(mostrarUsuarios(parametros))
+		datacheckpermisos.forEach(async (item) => {
+			if (item.check) {
+				let parametrospermisos = {
+					id_usuario: p.id,
+					idmodulo: item.id,
+				}
+				await InsertarPermisos(parametrospermisos)
+			}
+		})
+
+		const { mostrarUsuariosTodos } = get()
+		set(mostrarUsuariosTodos({ _id_empresa: id_empresa }))
 	},
 
 	buscarUsuarios: async (p) => {
@@ -131,6 +146,30 @@ export const useUsuariosStore = create((set, get) => ({
 		const response = await MostrarPermisos(p)
 
 		set({ datapermisos: response })
+
+		let allDocs = []
+
+		DataModulosConfiguracion.map((item) => {
+			const statePermiso = response.some((element) =>
+				element.modulos.nombre.includes(item.title)
+			)
+			if (statePermiso) {
+				allDocs.push({ ...item, state: true })
+			} else {
+				allDocs.push({ ...item, state: false })
+			}
+		})
+
+		DataModulosConfiguracion.splice(0, DataModulosConfiguracion.length)
+		DataModulosConfiguracion.push(...allDocs)
+
+		return response
+	},
+
+	mostrarPermisosEditando: async (p) => {
+		const response = await MostrarPermisos(p)
+
+		set({ datapermisosedit: response })
 		return response
 	},
 }))

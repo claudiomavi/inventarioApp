@@ -4,12 +4,19 @@ import {
 	SpinnerLoader,
 	useEmpresaStore,
 	useCategoriasStore,
+	useUsuariosStore,
+	BloqueoPagina,
 } from '../autoBarrell'
 
 export function Categorias() {
 	const { mostrarCategorias, datacategorias, buscarCategorias, buscador } =
 		useCategoriasStore()
 	const { dataempresa } = useEmpresaStore()
+	const { datapermisos } = useUsuariosStore()
+
+	const statePermiso = datapermisos.some((item) =>
+		item.modulos.nombre.includes('Categoria de productos')
+	)
 
 	const { isLoading, error } = useQuery({
 		queryKey: ['mostrar categorias', { id_empresa: dataempresa?.id }],
@@ -17,7 +24,7 @@ export function Categorias() {
 		enabled: dataempresa?.id != null,
 	})
 
-	const { data: buscardata } = useQuery({
+	const { data: _buscardata } = useQuery({
 		queryKey: [
 			'buscar categorias',
 			{ id_empresa: dataempresa.id, descripcion: buscador },
@@ -26,6 +33,8 @@ export function Categorias() {
 			buscarCategorias({ id_empresa: dataempresa.id, descripcion: buscador }),
 		enabled: dataempresa.id != null,
 	})
+
+	if (!statePermiso) return <BloqueoPagina state={statePermiso} />
 
 	if (isLoading) return <SpinnerLoader />
 
