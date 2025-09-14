@@ -39,7 +39,7 @@ export const useUsuariosStore = create((set, get) => ({
 		const datauser = await InsertarUsuarios({
 			idauth: data.user.id,
 			fecharegistro: new Date(),
-			tipouser: 'admin',
+			tipouser: 'superadmin',
 		})
 		return datauser
 	},

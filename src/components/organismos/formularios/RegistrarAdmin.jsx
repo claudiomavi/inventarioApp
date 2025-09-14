@@ -1,5 +1,10 @@
 import styled from 'styled-components'
-import { InputText, Btnsave, useUsuariosStore, v } from '../../../autoBarrell'
+import {
+	InputText,
+	Btnsave,
+	useUsuariosStore,
+	v as _v,
+} from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { MdAlternateEmail } from 'react-icons/md'
 import { RiLockPasswordLine } from 'react-icons/ri'
@@ -22,7 +27,6 @@ export function RegistrarAdmin({ setState }) {
 			const p = {
 				correo: data.correo,
 				pass: data.pass,
-				tipouser: 'superadmin',
 			}
 			const dt = await insertarUsuarioAdmin(p)
 			if (dt) {
@@ -83,7 +87,7 @@ export function RegistrarAdmin({ setState }) {
 						</article>
 						<div className="btnguardarContent">
 							<Btnsave
-								icono={<v.iconoguardar />}
+								icono={<_v.iconoguardar />}
 								titulo="Guardar"
 								bgcolor="#ff7556"
 							/>

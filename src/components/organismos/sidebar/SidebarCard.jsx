@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import { v, Btnsave } from '../../../autoBarrell'
+import { v as _v, Btnsave } from '../../../autoBarrell'
 
 export function SidebarCard() {
 	return (
 		<Container>
-			<span className="icon">{<v.iconoayuda />}</span>
+			<span className="icon">{<_v.iconoayuda />}</span>
 			<div className="cardContent">
 				<div className="circle1"></div>
 				<div className="circle2"></div>
@@ -32,7 +32,7 @@ const Container = styled.div`
 		top: -8px;
 		right: 50%;
 		transform: translate(50%);
-		z-index: 100;
+		z-index: 1000;
 	}
 	.cardContent {
 		position: relative;

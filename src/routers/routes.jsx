@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import {
 	Categorias,
 	Configuracion,
@@ -44,7 +44,13 @@ export function MyRoutes() {
 
 	if (isLoading) return <SpinnerLoader />
 
-	if (error) return <ErrorMolecula mensaje={error.message} />
+	if (error)
+		return (
+			<Navigate
+				replace
+				to="/login"
+			/>
+		)
 
 	return (
 		<Routes>

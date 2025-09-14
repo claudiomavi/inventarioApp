@@ -73,7 +73,7 @@ const Container = styled.div`
 	background: ${(props) => props.theme.bg};
 	position: fixed;
 	padding-top: 20px;
-	z-index: 1;
+	z-index: 1000;
 	height: 100%;
 	width: 65px;
 	transition: 0.1s ease-in-out;
@@ -190,7 +190,7 @@ const Main = styled.div`
 		justify-content: center;
 		cursor: pointer;
 		transition: all 0.2s;
-		z-index: 2;
+		z-index: 2000;
 		transform: ${({ $isopen }) =>
 			$isopen === 'true' ? `translateX(162px) rotate(3.142rad)` : `initial`};
 		color: ${(props) => props.theme.text};

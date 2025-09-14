@@ -76,7 +76,7 @@ const NavBar = styled.nav`
 const HamburguerMenu = styled.span`
 	position: fixed;
 	top: 2rem;
-	z-index: 100;
+	z-index: 1000;
 
 	.toggle {
 		position: relative;
@@ -134,7 +134,7 @@ const Menu = styled.div`
 	display: flex;
 	align-items: center;
 	list-style: none;
-	z-index: 10;
+	z-index: 1000;
 	flex-direction: column;
 	position: fixed;
 	justify-content: center;
