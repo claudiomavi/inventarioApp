@@ -13,6 +13,8 @@ import {
 	useEmpresaStore,
 	UserAuth,
 	useUsuariosStore,
+	Kardex,
+	Reportes,
 } from '../autoBarrell'
 import { useQuery } from '@tanstack/react-query'
 
@@ -90,6 +92,14 @@ export function MyRoutes() {
 				<Route
 					path="/configurar/personal"
 					element={<Usuarios />}
+				/>
+				<Route
+					path="/kardex"
+					element={<Kardex />}
+				/>
+				<Route
+					path="/reportes"
+					element={<Reportes />}
 				/>
 			</Route>
 		</Routes>
