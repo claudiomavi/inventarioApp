@@ -4,21 +4,21 @@ import {
 	Buscador,
 	ContentFiltro,
 	Header,
-	RegistrarProductos,
-	TablaProductos,
+	RegistrarMarca,
+	TablaMarca,
 	Title,
-	useProductosStore,
+	useMarcaStore,
 	v as _v,
 } from '../../autoBarrell'
 import { useState } from 'react'
 
-export function ProductosTemplate({ data }) {
+export function ReportesTemplate({ data }) {
 	const [state, setState] = useState(false)
 	const [dataSelect, setDataSelect] = useState([])
 	const [accion, setAccion] = useState('')
 	const [openRegistro, setOpenRegistro] = useState(false)
 
-	const { setBuscador } = useProductosStore()
+	const { setBuscador } = useMarcaStore()
 
 	const nuevoRegistro = () => {
 		setOpenRegistro(!openRegistro)
@@ -29,7 +29,7 @@ export function ProductosTemplate({ data }) {
 	return (
 		<Container>
 			{openRegistro && (
-				<RegistrarProductos
+				<RegistrarMarca
 					onClose={() => setOpenRegistro(!openRegistro)}
 					dataSelect={dataSelect}
 					accion={accion}
@@ -43,7 +43,7 @@ export function ProductosTemplate({ data }) {
 			</header>
 			<section className="area1">
 				<ContentFiltro>
-					<Title>Productos</Title>
+					<Title>Reportes</Title>
 					<Btnfiltro
 						bgcolor="#f6f3f3"
 						textcolor="#353535"
@@ -56,7 +56,7 @@ export function ProductosTemplate({ data }) {
 				<Buscador setBuscador={setBuscador} />
 			</section>
 			<section className="main">
-				<TablaProductos
+				<TablaMarca
 					data={data}
 					setOpenRegistro={setOpenRegistro}
 					setDataSelect={setDataSelect}

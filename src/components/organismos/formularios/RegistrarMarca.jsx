@@ -5,7 +5,7 @@ import {
 	useMarcaStore,
 	useEmpresaStore,
 	convertirCapitalize,
-	v,
+	v as _,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 
@@ -60,7 +60,7 @@ export function RegistrarMarca({ onClose, dataSelect, accion }) {
 				>
 					<section>
 						<article>
-							<InputText icono={<v.iconomarca />}>
+							<InputText icono={<_v.iconomarca />}>
 								<input
 									className="form__field"
 									defaultValue={dataSelect.descripcion}
@@ -77,7 +77,7 @@ export function RegistrarMarca({ onClose, dataSelect, accion }) {
 
 						<div className="btnguardarContent">
 							<Btnsave
-								icono={<v.iconoguardar />}
+								icono={<_v.iconoguardar />}
 								titulo="Guardar"
 								bgcolor="#ef552b"
 							/>

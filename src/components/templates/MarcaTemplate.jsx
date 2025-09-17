@@ -8,7 +8,7 @@ import {
 	TablaMarca,
 	Title,
 	useMarcaStore,
-	v,
+	v as _v,
 } from '../../autoBarrell'
 import { useState } from 'react'
 
@@ -47,7 +47,7 @@ export function MarcaTemplate({ data }) {
 					<Btnfiltro
 						bgcolor="#f6f3f3"
 						textcolor="#353535"
-						icono={<v.agregar />}
+						icono={<_v.agregar />}
 						funcion={nuevoRegistro}
 					/>
 				</ContentFiltro>
