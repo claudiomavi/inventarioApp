@@ -48,11 +48,7 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 				id: dataSelect.id,
 				nombres: data.nombres,
 				correo: data.correo,
-				nro_doc: data.nro_doc,
-				telefono: data.telefono,
-				direccion: data.direccion,
 				tipouser: tipoUser.descripcion,
-				tipodoc: tipoDoc.descripcion,
 			}
 
 			await editarUsuarios(p, checkbox, dataempresa.id)
@@ -62,11 +58,7 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 				id: dataSelect.id,
 				nombres: data.nombres,
 				correo: data.correo,
-				nro_doc: data.nro_doc,
-				telefono: data.telefono,
-				direccion: data.direccion,
 				tipouser: tipoUser.descripcion,
-				tipodoc: tipoDoc.descripcion,
 				id_empresa: dataempresa.id,
 			}
 
@@ -167,73 +159,6 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 							</InputText>
 						</article>
 						<ContainerSelector>
-							<label>Tipo doc: </label>
-							<Selector
-								color="#fc6027"
-								texto2={tipoDoc.descripcion}
-								funcion={() => setStateTipoDoc(!stateTipoDoc)}
-							/>
-							{stateTipoDoc && (
-								<ListaGenerica
-									data={TipoDocData}
-									setState={() => setStateTipoDoc(!stateTipoDoc)}
-									scroll="scroll"
-									bottom="-260px"
-									funcion={(p) => setTipoDoc(p)}
-								/>
-							)}
-						</ContainerSelector>
-						<article>
-							<InputText icono={<_v.icononrodoc />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.nro_doc}
-									type="text"
-									placeholder=""
-									{...register('nro_doc', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">nro. doc</label>
-								{errors.nro_doc?.type === 'required' && <p>Campo requerido</p>}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<_v.iconotelefono />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.telefono}
-									type="number"
-									placeholder=""
-									{...register('telefono', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">telefono</label>
-								{errors.telefono?.type === 'required' && <p>Campo requerido</p>}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<_v.iconodireccion />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.direccion}
-									type="text"
-									placeholder=""
-									{...register('direccion', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">direccion</label>
-								{errors.direccion?.type === 'required' && (
-									<p>Campo requerido</p>
-								)}
-							</InputText>
-						</article>
-					</section>
-
-					<section className="seccionDerecha">
-						<ContainerSelector>
 							<label>Tipo usuario: </label>
 							<Selector
 								color="#fc6027"
@@ -250,6 +175,9 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 								/>
 							)}
 						</ContainerSelector>
+					</section>
+
+					<section className="seccionDerecha">
 						PERMISOS: 🔐
 						<ListaModulos
 							checkbox={checkbox}

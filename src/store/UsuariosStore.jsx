@@ -73,14 +73,10 @@ export const useUsuariosStore = create((set, get) => ({
 
 		const dataUserNew = await InsertarUsuarios({
 			nombres: p.nombres,
-			nro_doc: p.nro_doc,
-			telefono: p.telefono,
-			direccion: p.direccion,
 			fecharegistro: new Date(),
 			estado: 'activo',
 			idauth: data.user.id,
 			tipouser: p.tipouser,
-			tipodoc: p.tipodoc,
 			correo: p.correo,
 		})
 

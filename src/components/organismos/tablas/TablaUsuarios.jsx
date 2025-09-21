@@ -57,19 +57,6 @@ export function TablaUsuarios({
 			),
 		},
 		{
-			accessorKey: 'estado',
-			header: 'Estado',
-			enableSorting: false,
-			cell: (info) => (
-				<td
-					data-title="Estado"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
 			accessorKey: 'acciones',
 			header: '',
 			enableSorting: false,

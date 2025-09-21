@@ -38,7 +38,7 @@ export function Layout({ children }) {
 		enabled: !!datausuarios,
 	})
 
-	if (isLoading) return <SpinnerLoader />
+	// if (isLoading) return <SpinnerLoader />
 
 	if (error)
 		return (
