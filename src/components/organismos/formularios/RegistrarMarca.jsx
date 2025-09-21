@@ -5,7 +5,7 @@ import {
 	useMarcaStore,
 	useEmpresaStore,
 	convertirCapitalize,
-	v as _,
+	v as _v,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 

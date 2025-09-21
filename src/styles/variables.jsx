@@ -49,7 +49,7 @@ export const v = {
 	iconomarca: TbBrandBitbucket,
 	iconoprecioventa: FaRegMoneyBillAlt,
 	iconopreciocompra: CiMoneyBill,
-	iconocodigointerno: DiCodepen,
+	iconounidadmedida: DiCodepen,
 	iconocodigobarras: AiOutlineBarcode,
 	iconostockminimo: BiBellMinus,
 	iconotelefono: MdOutlinePhoneInTalk,

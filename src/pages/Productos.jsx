@@ -46,7 +46,7 @@ export function Productos() {
 			{ id_empresa: dataempresa.id, descripcion: buscador },
 		],
 		queryFn: () =>
-			buscarProductos({ _id_empresa: dataempresa.id, buscador: buscador }),
+			buscarProductos({ id_empresa: dataempresa.id, descripcion: buscador }),
 		enabled: dataempresa.id != null,
 	})
 

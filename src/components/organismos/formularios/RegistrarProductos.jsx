@@ -10,7 +10,7 @@ import {
 	useMarcaStore,
 	Btnfiltro,
 	RegistrarMarca,
-	v,
+	v as _v,
 	ListaGenerica,
 	useCategoriasStore,
 	RegistrarCategorias,
@@ -65,14 +65,11 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				id: dataSelect.id,
 				descripcion: convertirCapitalize(data.descripcion),
 				idmarca: marcaItemSelect.id,
-				stock: parseFloat(data.stock),
-				stock_minimo: parseFloat(data.stockminimo),
-				codigobarras: convertirCapitalize(data.codigobarras),
-				codigointerno: convertirCapitalize(data.codigointerno),
-				precioventa: parseFloat(data.precioventa),
+				codigo: convertirCapitalize(data.codigo),
 				preciocompra: parseFloat(data.preciocompra),
 				id_categoria: categoriasItemSelect.id,
 				id_empresa: dataempresa.id,
+				unidad_medida: convertirCapitalize(data.unidad_medida),
 			}
 
 			await editarProductos(p)
@@ -81,14 +78,11 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 			const p = {
 				_descripcion: convertirCapitalize(data.descripcion),
 				_idmarca: marcaItemSelect.id,
-				_stock: parseFloat(data.stock),
-				_stock_minimo: parseFloat(data.stockminimo),
-				_codigobarras: convertirCapitalize(data.codigobarras),
-				_codigointerno: convertirCapitalize(data.codigointerno),
-				_precioventa: parseFloat(data.precioventa),
+				_codigo: convertirCapitalize(data.codigo),
 				_preciocompra: parseFloat(data.preciocompra),
 				_id_categoria: categoriasItemSelect.id,
 				_id_empresa: dataempresa.id,
+				_unidad_medida: convertirCapitalize(data.unidad_medida),
 			}
 
 			await insertarProductos(p)
@@ -129,7 +123,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				>
 					<section className="seccionDerecha">
 						<article>
-							<InputText icono={<v.icononombre />}>
+							<InputText icono={<_v.icononombre />}>
 								<input
 									className="form__field"
 									defaultValue={dataSelect.descripcion}
@@ -166,44 +160,10 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 							<Btnfiltro
 								bgcolor="#f6f3f3"
 								textcolor="#353535"
-								icono={<v.agregar />}
+								icono={<_v.agregar />}
 								funcion={nuevoRegistroMarca}
 							/>
 						</ContainerSelector>
-						<article>
-							<InputText icono={<v.iconostock />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.stock}
-									type="number"
-									step="0.01"
-									placeholder=""
-									{...register('stock', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">stock</label>
-								{errors.stock?.type === 'required' && <p>Campo requerido</p>}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<v.iconostockminimo />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.stock_minimo}
-									type="number"
-									step="0.01"
-									placeholder=""
-									{...register('stockminimo', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">stock minimo</label>
-								{errors.stockminimo?.type === 'required' && (
-									<p>Campo requerido</p>
-								)}
-							</InputText>
-						</article>
 						<ContainerSelector>
 							<label>Categoria: </label>
 							<Selector
@@ -225,7 +185,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 							<Btnfiltro
 								bgcolor="#f6f3f3"
 								textcolor="#353535"
-								icono={<v.agregar />}
+								icono={<_v.agregar />}
 								funcion={nuevoRegistroCategoria}
 							/>
 						</ContainerSelector>
@@ -233,59 +193,26 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 
 					<section className="seccionIzquierda">
 						<article>
-							<InputText icono={<v.iconocodigobarras />}>
+							<InputText icono={<_v.iconocodigobarras />}>
 								<input
 									className="form__field"
-									defaultValue={dataSelect.codigobarras}
+									defaultValue={dataSelect.codigo}
 									type="text"
 									placeholder=""
-									{...register('codigobarras', {
+									{...register('codigo', {
 										required: true,
 									})}
 								/>
-								<label className="form__label">codigo de barras</label>
+								<label className="form__label">código</label>
 								{errors.codigobarras?.type === 'required' && (
 									<p>Campo requerido</p>
 								)}
 							</InputText>
 						</article>
 						<article>
-							<InputText icono={<v.iconocodigointerno />}>
+							<InputText icono={<_v.iconopreciocompra />}>
 								<input
-									className="form__field"
-									defaultValue={dataSelect.codigointerno}
-									type="text"
-									placeholder=""
-									{...register('codigointerno', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">codigo interno</label>
-								{errors.codigointerno?.type === 'required' && (
-									<p>Campo requerido</p>
-								)}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<v.iconoprecioventa />}>
-								<input
-									className="form__field"
-									defaultValue={dataSelect.precioventa}
-									type="number"
-									placeholder=""
-									{...register('precioventa', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">precio de venta</label>
-								{errors.precioventa?.type === 'required' && (
-									<p>Campo requerido</p>
-								)}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<v.iconopreciocompra />}>
-								<input
+									step="0.01"
 									className="form__field"
 									defaultValue={dataSelect.preciocompra}
 									type="number"
@@ -300,11 +227,28 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 								)}
 							</InputText>
 						</article>
+						<article>
+							<InputText icono={<_v.iconounidadmedida />}>
+								<input
+									className="form__field"
+									defaultValue={dataSelect.unidad_medida}
+									type="text"
+									placeholder=""
+									{...register('unidad_medida', {
+										required: true,
+									})}
+								/>
+								<label className="form__label">unidad de medida</label>
+								{errors.unidad_medida?.type === 'required' && (
+									<p>Campo requerido</p>
+								)}
+							</InputText>
+						</article>
 					</section>
 
 					<div className="btnguardarContent">
 						<Btnsave
-							icono={<v.iconoguardar />}
+							icono={<_v.iconoguardar />}
 							titulo="Guardar"
 							bgcolor="#ef552b"
 						/>
