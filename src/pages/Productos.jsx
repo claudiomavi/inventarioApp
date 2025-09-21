@@ -3,6 +3,7 @@ import {
 	BloqueoPagina,
 	ProductosTemplate,
 	SpinnerLoader,
+	useCategoriasMerceologicasStore,
 	useCategoriasStore,
 	useEmpresaStore,
 	useMarcaStore,
@@ -11,10 +12,12 @@ import {
 } from '../autoBarrell'
 
 export function Productos() {
-	const { mostrarProductos, dataproductos, buscarProductos, buscador } =
+	const { mostrarProductos, buscarProductos, buscador, dataproductos } =
 		useProductosStore()
 	const { mostrarMarca } = useMarcaStore()
 	const { mostrarCategorias } = useCategoriasStore()
+	const { mostrarCategoriasMerceologicas, datacategoriasmerceologicas } =
+		useCategoriasMerceologicasStore()
 	const { dataempresa } = useEmpresaStore()
 	const { datapermisos } = useUsuariosStore()
 
@@ -25,7 +28,7 @@ export function Productos() {
 	const { isLoading, error } = useQuery({
 		queryKey: ['mostrar productos', { _id_empresa: dataempresa?.id }],
 		queryFn: () => mostrarProductos({ _id_empresa: dataempresa?.id }),
-		enabled: dataempresa?.id != null,
+		enabled: dataempresa?.id != null && !!datacategoriasmerceologicas?.length,
 	})
 
 	const { data: _datamarcas } = useQuery({
@@ -37,6 +40,16 @@ export function Productos() {
 	const { data: _datacategorias } = useQuery({
 		queryKey: ['mostrar categorias', { id_empresa: dataempresa?.id }],
 		queryFn: () => mostrarCategorias({ id_empresa: dataempresa?.id }),
+		enabled: dataempresa?.id != null,
+	})
+
+	const { data: _datacategoriasmerceologicas } = useQuery({
+		queryKey: [
+			'mostrar categorias merceologicas',
+			{ id_empresa: dataempresa?.id },
+		],
+		queryFn: () =>
+			mostrarCategoriasMerceologicas({ id_empresa: dataempresa?.id }),
 		enabled: dataempresa?.id != null,
 	})
 

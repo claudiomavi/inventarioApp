@@ -12,6 +12,7 @@ import {
 	Reportes,
 	Layout,
 	Colores,
+	CategoriasMerceologicas,
 } from '../autoBarrell'
 import StockActualTodos from '../components/organismos/reportes/StockActualTodos'
 import StockActualPorProducto from '../components/organismos/reportes/StockActualPorProducto'
@@ -100,6 +101,16 @@ export function MyRoutes() {
 					<ProtectedRoute accessBy="authenticated">
 						<Layout>
 							<Colores />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar/categorias-merceologicas"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<CategoriasMerceologicas />
 						</Layout>
 					</ProtectedRoute>
 				}

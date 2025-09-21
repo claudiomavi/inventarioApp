@@ -15,6 +15,7 @@ import {
 	useCategoriasStore,
 	RegistrarCategorias,
 	Device,
+	useCategoriasMerceologicasStore,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
@@ -22,8 +23,14 @@ import { useEffect, useState } from 'react'
 export function RegistrarProductos({ onClose, dataSelect, accion }) {
 	const [stateMarca, setStateMarca] = useState(false)
 	const [stateCategorias, setStateCategorias] = useState(false)
+	const [stateCategoriasMerceologicas, setStateCategoriasMerceologicas] =
+		useState(false)
 	const [openRegistroMarca, setOpenRegistroMarca] = useState(false)
 	const [openRegistroCategorias, setOpenRegistroCategorias] = useState(false)
+	const [
+		openRegistroCategoriasMerceologicas,
+		setOpenRegistroCategoriasMerceologicas,
+	] = useState(false)
 	const [subaccion, setSubaccion] = useState('')
 
 	const { insertarProductos, editarProductos } = useProductosStore()
@@ -31,6 +38,11 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 	const { marcaItemSelect, datamarca, selectMarca } = useMarcaStore()
 	const { categoriasItemSelect, datacategorias, selectCategorias } =
 		useCategoriasStore()
+	const {
+		categoriasmerceologicasItemSelect,
+		datacategoriasmerceologicas,
+		selectCategoriasMerceologicas,
+	} = useCategoriasMerceologicasStore()
 
 	const {
 		register,
@@ -56,8 +68,25 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 					selectCategorias(categoria)
 				}
 			}
+
+			if (
+				dataSelect.id_categoria_merceologica &&
+				datacategoriasmerceologicas?.length > 0
+			) {
+				const categoriamerceologica = datacategoriasmerceologicas.find(
+					(c) => c.id === dataSelect.id_categoria_merceologica
+				)
+				if (categoriamerceologica)
+					selectCategoriasMerceologicas(categoriamerceologica)
+			}
 		}
-	}, [accion, dataSelect, datamarca, datacategorias])
+	}, [
+		accion,
+		dataSelect,
+		datamarca,
+		datacategorias,
+		datacategoriasmerceologicas,
+	])
 
 	const insertar = async (data) => {
 		if (accion === 'Editar') {
@@ -70,6 +99,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				id_categoria: categoriasItemSelect.id,
 				id_empresa: dataempresa.id,
 				unidad_medida: convertirCapitalize(data.unidad_medida),
+				categoria_merceologica: categoriasmerceologicasItemSelect.id,
 			}
 
 			await editarProductos(p)
@@ -83,6 +113,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				_id_categoria: categoriasItemSelect.id,
 				_id_empresa: dataempresa.id,
 				_unidad_medida: convertirCapitalize(data.unidad_medida),
+				_categoria_merceologica: categoriasmerceologicasItemSelect.id,
 			}
 
 			await insertarProductos(p)
@@ -97,6 +128,11 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 
 	const nuevoRegistroCategoria = () => {
 		setOpenRegistroCategorias(!openRegistroCategorias)
+		setSubaccion('Nuevo')
+	}
+
+	const nuevoRegistroCategoriaMerceologica = () => {
+		setOpenRegistroCategoriasMerceologicas(!openRegistroCategoriasMerceologicas)
 		setSubaccion('Nuevo')
 	}
 
@@ -187,6 +223,37 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 								textcolor="#353535"
 								icono={<_v.agregar />}
 								funcion={nuevoRegistroCategoria}
+							/>
+						</ContainerSelector>
+						<ContainerSelector>
+							<label>Categoria Merceologica: </label>
+							<Selector
+								color="#fc6027"
+								// texto1="🍿"
+								texto2={categoriasmerceologicasItemSelect?.descripcion}
+								state={stateCategoriasMerceologicas}
+								funcion={() =>
+									setStateCategoriasMerceologicas(!stateCategoriasMerceologicas)
+								}
+							/>
+							{stateCategoriasMerceologicas && (
+								<ListaGenerica
+									bottom="-260px"
+									data={datacategoriasmerceologicas}
+									scroll="scroll"
+									setState={() =>
+										setStateCategoriasMerceologicas(
+											!stateCategoriasMerceologicas
+										)
+									}
+									funcion={selectCategoriasMerceologicas}
+								/>
+							)}
+							<Btnfiltro
+								bgcolor="#f6f3f3"
+								textcolor="#353535"
+								icono={<_v.agregar />}
+								funcion={nuevoRegistroCategoriaMerceologica}
 							/>
 						</ContainerSelector>
 					</section>

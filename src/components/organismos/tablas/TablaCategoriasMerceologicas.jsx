@@ -8,49 +8,29 @@ import {
 } from '@tanstack/react-table'
 import styled from 'styled-components'
 import {
-	ColorContent,
-	ColorContentTable,
 	ContentAccionesTabla,
 	Paginacion,
-	useProductosStore,
+	useCategoriasMerceologicasStore,
 	v,
 } from '../../../autoBarrell'
 import Swal from 'sweetalert2'
 import { FaArrowsAltV } from 'react-icons/fa'
 
-export function TablaProductos({
+export function TablaCategoriasMerceologicas({
 	data,
 	setOpenRegistro,
 	setDataSelect,
 	setAccion,
 }) {
-	const { eliminarProductos } = useProductosStore()
+	const { eliminarCategoriasMerceologicas } = useCategoriasMerceologicasStore()
 
 	const editar = (p) => {
-		if (p.descripcion === 'Generico') {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Este registro no se puede modificar ya que es un valor por defecto...',
-			})
-			return
-		}
 		setOpenRegistro(true)
 		setDataSelect(p)
 		setAccion('Editar')
-
-		console.log(p)
 	}
 
 	const eliminar = (p) => {
-		if (p.descripcion === 'Generico') {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Este registro no se puede eliminar ya que es un valor por defecto...',
-			})
-			return
-		}
 		Swal.fire({
 			title: 'Estás segur@?',
 			text: 'Una vez eliminado, no se podrá recuperar este registro',
@@ -62,24 +42,12 @@ export function TablaProductos({
 			cancelButtonText: 'Cancelar',
 		}).then(async (result) => {
 			if (result.isConfirmed) {
-				await eliminarProductos({ id: p.id })
+				await eliminarCategoriasMerceologicas({ id: p.id })
 			}
 		})
 	}
 
 	const columns = [
-		{
-			accessorKey: 'codigo',
-			header: 'Código',
-			cell: (info) => (
-				<td
-					data-title="Código"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
 		{
 			accessorKey: 'descripcion',
 			header: 'Descripcion',
@@ -89,56 +57,6 @@ export function TablaProductos({
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'unidad_medida',
-			header: 'Unidad medida',
-			cell: (info) => (
-				<td
-					data-title="Unidad medida"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'preciocompra',
-			header: 'P. Compra',
-			cell: (info) => (
-				<td
-					data-title="P. Compra"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'categoria',
-			header: 'Categoria',
-			cell: (info) => (
-				<td
-					data-title="Categoria"
-					className="content-cell"
-				>
-					<ColorContentTable $color={info.row.original.color}>
-						{info.getValue() || 'Cargando...'}
-					</ColorContentTable>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'marca',
-			header: 'Marca',
-			cell: (info) => (
-				<td
-					data-title="Marca"
-					className="content-cell"
-				>
-					<span>{info.getValue() || 'Cargando...'}</span>
 				</td>
 			),
 		},
