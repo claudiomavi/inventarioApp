@@ -1,22 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import {
 	Categorias,
 	Configuracion,
-	ErrorMolecula,
 	Home,
 	Login,
 	Marca,
 	Usuarios,
 	Productos,
 	ProtectedRoute,
-	SpinnerLoader,
-	useEmpresaStore,
-	UserAuth,
-	useUsuariosStore,
 	Kardex,
 	Reportes,
+	Layout,
 } from '../autoBarrell'
-import { useQuery } from '@tanstack/react-query'
 import StockActualTodos from '../components/organismos/reportes/StockActualTodos'
 import StockActualPorProducto from '../components/organismos/reportes/StockActualPorProducto'
 import StockBajoMinimo from '../components/organismos/reportes/StockBajoMinimo'
@@ -24,109 +19,120 @@ import KardexEntradasSalidas from '../components/organismos/reportes/KardexEntra
 import InventarioValorado from '../components/organismos/reportes/InventarioValorado'
 
 export function MyRoutes() {
-	const { user } = UserAuth()
-	const { mostrarUsuarios, idusuario, mostrarPermisos } = useUsuariosStore()
-	const { mostrarEmpresa } = useEmpresaStore()
-
-	const {
-		data: datausuarios,
-		isLoading,
-		error,
-	} = useQuery({
-		queryKey: ['mostrar usuarios'],
-		queryFn: mostrarUsuarios,
-	})
-
-	const { data: _dataempresa } = useQuery({
-		queryKey: ['mostrar empresa'],
-		queryFn: () => mostrarEmpresa({ idusuario }),
-		enabled: !!datausuarios,
-	})
-
-	const { data: _datapermisos } = useQuery({
-		queryKey: ['mostrar permisos', { id_usuario: idusuario }],
-		queryFn: () => mostrarPermisos({ id_usuario: idusuario }),
-		enabled: !!datausuarios,
-	})
-
-	if (isLoading) return <SpinnerLoader />
-
-	if (error)
-		return (
-			<Navigate
-				replace
-				to="/login"
-			/>
-		)
-
 	return (
 		<Routes>
 			<Route
 				path="/login"
-				element={<Login />}
+				element={
+					<ProtectedRoute accessBy="non-authenticated">
+						<Login />
+					</ProtectedRoute>
+				}
 			/>
 
 			<Route
+				path="/"
 				element={
 					<ProtectedRoute
-						user={user}
-						redirectTo="/login"
-					/>
+						ProtectedRoute
+						accessBy="authenticated"
+					>
+						<Layout>
+							<Home />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Configuracion />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar/marca"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Marca />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar/categorias"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Categorias />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar/productos"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Productos />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar/personal"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Usuarios />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/kardex"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Kardex />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/reportes"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Reportes />
+						</Layout>
+					</ProtectedRoute>
 				}
 			>
 				<Route
-					path="/"
-					element={<Home />}
+					path="stock-actual-todos"
+					element={<StockActualTodos />}
 				/>
 				<Route
-					path="/configurar"
-					element={<Configuracion />}
+					path="stock-actual-por-producto"
+					element={<StockActualPorProducto />}
 				/>
 				<Route
-					path="/configurar/marca"
-					element={<Marca />}
+					path="stock-actual-bajo-minimo"
+					element={<StockBajoMinimo />}
 				/>
 				<Route
-					path="/configurar/categorias"
-					element={<Categorias />}
+					path="entradas-salidas-por-producto"
+					element={<KardexEntradasSalidas />}
 				/>
 				<Route
-					path="/configurar/productos"
-					element={<Productos />}
+					path="inventario-valorado"
+					element={<InventarioValorado />}
 				/>
-				<Route
-					path="/configurar/personal"
-					element={<Usuarios />}
-				/>
-				<Route
-					path="/kardex"
-					element={<Kardex />}
-				/>
-				<Route
-					path="/reportes"
-					element={<Reportes />}
-				>
-					<Route
-						path="stock-actual-todos"
-						element={<StockActualTodos />}
-					/>
-					<Route
-						path="stock-actual-por-producto"
-						element={<StockActualPorProducto />}
-					/>
-					<Route
-						path="stock-actual-bajo-minimo"
-						element={<StockBajoMinimo />}
-					/>
-					<Route
-						path="entradas-salidas-por-producto"
-						element={<KardexEntradasSalidas />}
-					/>
-					<Route
-						path="inventario-valorado"
-						element={<InventarioValorado />}
-					/>
-				</Route>
 			</Route>
 		</Routes>
 	)
