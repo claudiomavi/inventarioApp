@@ -17,6 +17,11 @@ import {
 	Reportes,
 } from '../autoBarrell'
 import { useQuery } from '@tanstack/react-query'
+import StockActualTodos from '../components/organismos/reportes/StockActualTodos'
+import StockActualPorProducto from '../components/organismos/reportes/StockActualPorProducto'
+import StockBajoMinimo from '../components/organismos/reportes/StockBajoMinimo'
+import KardexEntradasSalidas from '../components/organismos/reportes/KardexEntradasSalidas'
+import InventarioValorado from '../components/organismos/reportes/InventarioValorado'
 
 export function MyRoutes() {
 	const { user } = UserAuth()
@@ -100,7 +105,28 @@ export function MyRoutes() {
 				<Route
 					path="/reportes"
 					element={<Reportes />}
-				/>
+				>
+					<Route
+						path="stock-actual-todos"
+						element={<StockActualTodos />}
+					/>
+					<Route
+						path="stock-actual-por-producto"
+						element={<StockActualPorProducto />}
+					/>
+					<Route
+						path="stock-actual-bajo-minimo"
+						element={<StockBajoMinimo />}
+					/>
+					<Route
+						path="entradas-salidas-por-producto"
+						element={<KardexEntradasSalidas />}
+					/>
+					<Route
+						path="inventario-valorado"
+						element={<InventarioValorado />}
+					/>
+				</Route>
 			</Route>
 		</Routes>
 	)

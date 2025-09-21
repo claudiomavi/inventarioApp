@@ -19,7 +19,7 @@ export function FooterLogin() {
 				</span>
 			</section>
 			<section className="derechos">
-				<span>StockPRO</span>
+				<span>InventarioPRO</span>
 				<div className="separador"></div>
 				<span>Todos los derechos reservados</span>
 				<div className="separador"></div>

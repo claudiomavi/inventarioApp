@@ -5,6 +5,11 @@ import {
 	EliminarProductos,
 	InsertarProductos,
 	MostrarProductos,
+	ReportInventarioValorado,
+	ReportKardexEntradasSalidas,
+	ReportStockBajoMinimo,
+	ReportStockPorProducto,
+	ReportStockProductosTodos,
 } from '../autoBarrell'
 
 export const useProductosStore = create((set, get) => ({
@@ -59,6 +64,36 @@ export const useProductosStore = create((set, get) => ({
 		const response = await BuscarProductos(p)
 
 		set({ dataproductos: response })
+		return response
+	},
+
+	reportStockProductosTodos: async (p) => {
+		const response = await ReportStockProductosTodos(p)
+
+		return response
+	},
+
+	reportStockPorProducto: async (p) => {
+		const response = await ReportStockPorProducto(p)
+
+		return response
+	},
+
+	reportStockBajoMinimo: async (p) => {
+		const response = await ReportStockBajoMinimo(p)
+
+		return response
+	},
+
+	reportKardexEntradasSalidas: async (p) => {
+		const response = await ReportKardexEntradasSalidas(p)
+
+		return response
+	},
+
+	reportInventarioValorado: async (p) => {
+		const response = await ReportInventarioValorado(p)
+
 		return response
 	},
 }))

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { CardDatosEmpresa, useEmpresaStore, v } from '../../autoBarrell'
+import { CardDatosEmpresa, useEmpresaStore, v as _v } from '../../autoBarrell'
 
 export function BannerEmpresa() {
 	const { dataempresa, contadorusuarios } = useEmpresaStore()
@@ -7,10 +7,10 @@ export function BannerEmpresa() {
 		<Container>
 			<div className="content-wrapper-context">
 				<span className="titulo">
-					{<v.iconoempresa />} {dataempresa?.nombre}
+					{<_v.iconoempresa />} {dataempresa?.nombre}
 				</span>
 				<div className="content-text">
-					StockPRO te mantiene siempre informado.
+					InventarioPRO está disponible desde cualquier dispositivo.
 				</div>
 				<ContentCards>
 					<CardDatosEmpresa

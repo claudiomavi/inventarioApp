@@ -1,13 +1,17 @@
 import styled from 'styled-components'
 import { FaSearch } from 'react-icons/fa'
 
-export function Buscador({ setBuscador }) {
+export function Buscador({ setBuscador, funcion }) {
 	const buscar = (e) => {
 		setBuscador(e.target.value)
 	}
 
+	const ejecutarFuncion = () => {
+		if (funcion) funcion()
+	}
+
 	return (
-		<Container>
+		<Container onClick={ejecutarFuncion}>
 			<article className="content">
 				<FaSearch className="icon" />
 				<input

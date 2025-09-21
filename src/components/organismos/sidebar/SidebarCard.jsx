@@ -1,7 +1,9 @@
 import styled from 'styled-components'
-import { v as _v, Btnsave } from '../../../autoBarrell'
+import { v as _v, Btnsave, useAuthStore } from '../../../autoBarrell'
 
 export function SidebarCard() {
+	const { signOut } = useAuthStore()
+
 	return (
 		<Container>
 			<span className="icon">{<_v.iconoayuda />}</span>
@@ -13,6 +15,7 @@ export function SidebarCard() {
 					<Btnsave
 						titulo="Cerrar ..."
 						bgcolor="#f8f2fd"
+						funcion={() => signOut()}
 					/>
 				</div>
 			</div>
