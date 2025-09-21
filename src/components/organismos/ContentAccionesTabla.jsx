@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { AccionTabla, v } from '../../autoBarrell'
+import { AccionTabla, v as _v } from '../../autoBarrell'
 
 export function ContentAccionesTabla({ funcionEditar, funcionEliminar }) {
 	return (
@@ -8,14 +8,16 @@ export function ContentAccionesTabla({ funcionEditar, funcionEliminar }) {
 				funcion={funcionEditar}
 				fontSize="18px"
 				color="#d7d7d7"
-				icono={<v.iconeditarTabla />}
+				icono={<_v.iconeditarTabla />}
 			/>
-			<AccionTabla
-				funcion={funcionEliminar}
-				fontSize="18px"
-				color="#f76e8e"
-				icono={<v.iconeliminarTabla />}
-			/>
+			{funcionEliminar && (
+				<AccionTabla
+					funcion={funcionEliminar}
+					fontSize="18px"
+					color="#f76e8e"
+					icono={<_v.iconeliminarTabla />}
+				/>
+			)}
 		</Container>
 	)
 }

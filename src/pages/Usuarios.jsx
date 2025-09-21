@@ -19,7 +19,7 @@ export function Usuarios() {
 	const { dataempresa } = useEmpresaStore()
 
 	const statePermiso = datapermisos.some((item) =>
-		item.modulos.nombre.includes('Marca de productos')
+		item.modulos.nombre.includes('Personal')
 	)
 
 	const { isLoading, error } = useQuery({

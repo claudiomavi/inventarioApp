@@ -7,12 +7,7 @@ import {
 	useReactTable,
 } from '@tanstack/react-table'
 import styled from 'styled-components'
-import {
-	ContentAccionesTabla,
-	Paginacion,
-	useUsuariosStore,
-	v,
-} from '../../../autoBarrell'
+import { ContentAccionesTabla, Paginacion, v } from '../../../autoBarrell'
 import Swal from 'sweetalert2'
 import { FaArrowsAltV } from 'react-icons/fa'
 
@@ -22,8 +17,6 @@ export function TablaUsuarios({
 	setDataSelect,
 	setAccion,
 }) {
-	const { eliminarUsuario } = useUsuariosStore()
-
 	const editar = (p) => {
 		if (p.tipouser === 'superadmin') {
 			Swal.fire({
@@ -36,31 +29,6 @@ export function TablaUsuarios({
 		setOpenRegistro(true)
 		setDataSelect(p)
 		setAccion('Editar')
-	}
-
-	const eliminar = (p) => {
-		if (p.tipouser === 'superadmin') {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Este registro no se puede eliminar ya que es un valor por defecto...',
-			})
-			return
-		}
-		Swal.fire({
-			title: 'Estás segur@?',
-			text: 'Una vez eliminado, no se podrá recuperar este registro',
-			icon: 'warning',
-			showCancelButton: true,
-			cancelButtonColor: '#3085d6',
-			confirmButtonColor: '#d33',
-			confirmButtonText: 'Si, eliminar!',
-			cancelButtonText: 'Cancelar',
-		}).then(async (result) => {
-			if (result.isConfirmed) {
-				await eliminarUsuario({ id: p.id })
-			}
-		})
 	}
 
 	const columns = [
@@ -110,7 +78,6 @@ export function TablaUsuarios({
 					{
 						<ContentAccionesTabla
 							funcionEditar={() => editar(info.row.original)}
-							funcionEliminar={() => eliminar(info.row.original)}
 						/>
 					}
 				</td>

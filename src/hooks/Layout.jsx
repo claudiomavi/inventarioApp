@@ -9,6 +9,7 @@ import {
 } from '../autoBarrell'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { Navigate } from 'react-router-dom'
 
 export function Layout({ children }) {
 	const [sidebarOpen, setSidebarOpen] = useState(false)
