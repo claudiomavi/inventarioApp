@@ -15,7 +15,7 @@ export function Reportes() {
 	const { mostrarKardex } = useKardexStore()
 
 	const statePermiso = datapermisos.some((item) =>
-		item.modulos.nombre.includes('Marca de productos')
+		item.modulos.nombre.includes('Reportes')
 	)
 
 	const { isLoading, error } = useQuery({

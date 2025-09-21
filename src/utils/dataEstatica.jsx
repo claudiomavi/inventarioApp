@@ -82,6 +82,24 @@ export const DataModulosConfiguracion = [
 		icono: 'https://i.ibb.co/1qsbCRb/piensa-fuera-de-la-caja.png',
 		link: '/configurar/marca',
 	},
+	{
+		title: 'Colores',
+		subtitle: 'gestiona los colores',
+		icono: 'https://i.ibb.co/jjNp9qZ/circulo-de-color.png',
+		link: '/configurar/colores',
+	},
+	{
+		title: 'Fechas inventarios',
+		subtitle: 'gestiona fechas de inventarios',
+		icono: 'https://i.ibb.co/C5ggmwG1/fechas-inventarios.png',
+		link: '/configurar/fechas-inventarios',
+	},
+	{
+		title: 'Categorias Merceologicas',
+		subtitle: 'gestiona tus categorías contables',
+		icono: 'https://i.ibb.co/m5qGC0VW/merceologica.png',
+		link: '/configurar/categorias-merceologicas',
+	},
 ]
 //tipo usuario
 export const TipouserData = [

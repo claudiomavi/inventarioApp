@@ -11,6 +11,7 @@ import {
 	Kardex,
 	Reportes,
 	Layout,
+	Colores,
 } from '../autoBarrell'
 import StockActualTodos from '../components/organismos/reportes/StockActualTodos'
 import StockActualPorProducto from '../components/organismos/reportes/StockActualPorProducto'
@@ -89,6 +90,16 @@ export function MyRoutes() {
 					<ProtectedRoute accessBy="authenticated">
 						<Layout>
 							<Usuarios />
+						</Layout>
+					</ProtectedRoute>
+				}
+			/>
+			<Route
+				path="/configurar/colores"
+				element={
+					<ProtectedRoute accessBy="authenticated">
+						<Layout>
+							<Colores />
 						</Layout>
 					</ProtectedRoute>
 				}

@@ -41,6 +41,7 @@ import { TbReportAnalytics } from 'react-icons/tb'
 import { MdOutlinePhoneInTalk } from 'react-icons/md'
 import { GoNumber } from 'react-icons/go'
 import { FaHouseUser } from 'react-icons/fa'
+import { MdInvertColors } from 'react-icons/md'
 
 export const v = {
 	iconoreportes: TbReportAnalytics,
@@ -59,6 +60,7 @@ export const v = {
 	icononombre: MdDriveFileRenameOutline,
 	iconoemail: MdAlternateEmail,
 	iconopass: RiLockPasswordLine,
+	iconocolores: MdInvertColors,
 	sidebarWidth: `300px`,
 	sidebarWidthInitial: `10vw`,
 	smSpacing: `8px`,
