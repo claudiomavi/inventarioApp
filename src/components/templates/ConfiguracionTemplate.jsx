@@ -48,7 +48,6 @@ export function ConfiguracionTemplate() {
 							key={index}
 						>
 							<MensajeNoPermiso state={item.state} />
-							{console.log(item)}
 							<div className="card-content">
 								<div className="card-image">
 									<img src={item.icono} />

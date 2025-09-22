@@ -42,6 +42,8 @@ import { MdOutlinePhoneInTalk } from 'react-icons/md'
 import { GoNumber } from 'react-icons/go'
 import { FaHouseUser } from 'react-icons/fa'
 import { MdInvertColors } from 'react-icons/md'
+import { CiCalendarDate } from 'react-icons/ci'
+import { VscSymbolBoolean } from 'react-icons/vsc'
 
 export const v = {
 	iconoreportes: TbReportAnalytics,
@@ -61,6 +63,8 @@ export const v = {
 	iconoemail: MdAlternateEmail,
 	iconopass: RiLockPasswordLine,
 	iconocolores: MdInvertColors,
+	iconofecha: CiCalendarDate,
+	iconoboolean: VscSymbolBoolean,
 	sidebarWidth: `300px`,
 	sidebarWidthInitial: `10vw`,
 	smSpacing: `8px`,

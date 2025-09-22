@@ -18,8 +18,6 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
-	const [tipoDoc, setTipoDoc] = useState({ icono: '', descripcion: 'otros' })
-	const [stateTipoDoc, setStateTipoDoc] = useState(false)
 	const [tipoUser, setTipoUser] = useState({
 		icono: '',
 		descripcion: 'empleado',
@@ -74,7 +72,6 @@ export function RegistrarUsuarios({ onClose, dataSelect, accion }) {
 
 	useEffect(() => {
 		if (accion === 'Editar') {
-			setTipoDoc({ icono: '', descripcion: dataSelect.tipodoc })
 			setTipoUser({ icono: '', descripcion: dataSelect.tipouser })
 		}
 	}, [])
