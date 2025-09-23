@@ -40,14 +40,6 @@ export function TablaKardex({
 	}
 
 	const eliminar = (p) => {
-		if (p.estado === 0) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Oops...',
-				text: 'Este registro ya fue eliminado...',
-			})
-			return
-		}
 		Swal.fire({
 			title: 'Estás segur@?',
 			text: 'Una vez eliminado, no se podrá recuperar este registro',
@@ -66,6 +58,18 @@ export function TablaKardex({
 
 	const columns = [
 		{
+			accessorKey: 'codigo',
+			header: 'Codigo',
+			cell: (info) => (
+				<td
+					data-title="Codigo"
+					className="content-cell"
+				>
+					<span>{info.getValue()}</span>
+				</td>
+			),
+		},
+		{
 			accessorKey: 'descripcion',
 			header: 'Producto',
 			cell: (info) => (
@@ -73,22 +77,16 @@ export function TablaKardex({
 					data-title="Producto"
 					className="content-cell"
 				>
-					<span
-						style={{
-							textDecoration: info.row.original.estado === 0 && 'line-through',
-						}}
-					>
-						{info.getValue()}
-					</span>
+					<span>{info.getValue()}</span>
 				</td>
 			),
 		},
 		{
-			accessorKey: 'fecha',
-			header: 'Fecha',
+			accessorKey: 'color',
+			header: 'Color',
 			cell: (info) => (
 				<td
-					data-title="Fecha"
+					data-title="Color"
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
@@ -96,39 +94,11 @@ export function TablaKardex({
 			),
 		},
 		{
-			accessorKey: 'tipo',
-			header: 'Tipo',
+			accessorKey: 'unidad_medida',
+			header: 'Unidad medida',
 			cell: (info) => (
 				<td
-					data-title="Tipo"
-					className="content-cell"
-				>
-					{info.getValue() === 'salida' ? (
-						<ColorContent $color="#ed4d4d">{info.getValue()}</ColorContent>
-					) : (
-						<ColorContent $color="#30c85b">{info.getValue()}</ColorContent>
-					)}
-				</td>
-			),
-		},
-		{
-			accessorKey: 'detalle',
-			header: 'Detalle',
-			cell: (info) => (
-				<td
-					data-title="Detalle"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'nombres',
-			header: 'Usuario',
-			cell: (info) => (
-				<td
-					data-title="Usuario"
+					data-title="Unidad medida"
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
@@ -141,18 +111,6 @@ export function TablaKardex({
 			cell: (info) => (
 				<td
 					data-title="Cantidad"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
-			accessorKey: 'stock',
-			header: 'Stock',
-			cell: (info) => (
-				<td
-					data-title="Stock"
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>

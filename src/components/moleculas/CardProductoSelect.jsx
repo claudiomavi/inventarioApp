@@ -4,7 +4,7 @@ export function CardProductoSelect({ text1, text2 }) {
 	return (
 		<Container>
 			<span className="descripcion">{text1}</span>
-			<span className="stock">stock actual: {text2}</span>
+			<span className="stock">{text2 && `código: ${text2}`}</span>
 		</Container>
 	)
 }

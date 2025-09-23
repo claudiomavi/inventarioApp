@@ -3,7 +3,9 @@ import {
 	BloqueoPagina,
 	KardexTemplate,
 	SpinnerLoader,
+	useColoresStore,
 	useEmpresaStore,
+	useFechasInventariosStore,
 	useKardexStore,
 	useProductosStore,
 	useUsuariosStore,
@@ -16,17 +18,40 @@ export function Kardex() {
 		buscarKardex,
 		buscador: buscadorkardex,
 	} = useKardexStore()
-	const { buscarProductos, buscador: buscadorproductos } = useProductosStore()
+	const {
+		buscarProductos,
+		buscador: buscadorproductos,
+		mostrarProductos,
+	} = useProductosStore()
+	const {
+		mostrarColores,
+		buscador: buscadorcolores,
+		buscarColores,
+	} = useColoresStore()
 	const { dataempresa } = useEmpresaStore()
 	const { datapermisos } = useUsuariosStore()
+	const { fechaInventarioActivo } = useFechasInventariosStore()
 
 	const statePermiso = datapermisos.some((item) =>
 		item.modulos.nombre.includes('Kardex')
 	)
 
+	const { data: dataproductos } = useQuery({
+		queryKey: ['mostrar productos', { _id_empresa: dataempresa?.id }],
+		queryFn: () => mostrarProductos({ _id_empresa: dataempresa?.id }),
+		enabled: dataempresa?.id != null,
+	})
+
+	// se concatena con la dataproductos que hay arriba para que se ejecute solo cuando ya exista
 	const { isLoading, error } = useQuery({
 		queryKey: ['mostrar kardex', { _id_empresa: dataempresa?.id }],
 		queryFn: () => mostrarKardex({ _id_empresa: dataempresa?.id }),
+		enabled: dataempresa?.id != null && !!dataproductos?.length,
+	})
+
+	const { data: _datacolores } = useQuery({
+		queryKey: ['mostrar colores', { id_empresa: dataempresa?.id }],
+		queryFn: () => mostrarColores({ id_empresa: dataempresa?.id }),
 		enabled: dataempresa?.id != null,
 	})
 
@@ -37,9 +62,19 @@ export function Kardex() {
 		],
 		queryFn: () =>
 			buscarProductos({
-				_id_empresa: dataempresa.id,
-				buscador: buscadorproductos,
+				id_empresa: dataempresa.id,
+				descripcion: buscadorproductos,
 			}),
+		enabled: dataempresa.id != null,
+	})
+
+	const { data: _buscarcolores } = useQuery({
+		queryKey: [
+			'buscar colores',
+			{ id_empresa: dataempresa.id, color: buscadorcolores },
+		],
+		queryFn: () =>
+			buscarColores({ id_empresa: dataempresa.id, color: buscadorcolores }),
 		enabled: dataempresa.id != null,
 	})
 
@@ -52,6 +87,15 @@ export function Kardex() {
 			buscarKardex({
 				_id_empresa: dataempresa.id,
 				buscador: buscadorkardex,
+			}),
+		enabled: dataempresa.id != null,
+	})
+
+	const { data: _inventarioactivo } = useQuery({
+		queryKey: ['fecha inventario activo', { id_empresa: dataempresa.id }],
+		queryFn: () =>
+			fechaInventarioActivo({
+				id_empresa: dataempresa.id,
 			}),
 		enabled: dataempresa.id != null,
 	})

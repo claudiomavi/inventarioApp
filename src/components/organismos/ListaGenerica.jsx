@@ -2,7 +2,15 @@ import styled from 'styled-components'
 import { BtnCerrar } from '../../autoBarrell'
 import { Device } from '../../styles/breackpoints'
 
-export function ListaGenerica({ data, setState, funcion, scroll, bottom }) {
+export function ListaGenerica({
+	showCodigo = false,
+	colorType = false,
+	data,
+	setState,
+	funcion,
+	scroll,
+	bottom,
+}) {
 	const selectFunction = (p) => {
 		funcion(p)
 		setState()
@@ -23,8 +31,9 @@ export function ListaGenerica({ data, setState, funcion, scroll, bottom }) {
 							key={index}
 							onClick={() => selectFunction(item)}
 						>
-							{/* <span>💎</span> */}
+							{showCodigo && <span>{item.codigo}</span>}
 							<span>{item.descripcion}</span>
+							{colorType && <span>{item.color}</span>}
 						</ItemContainer>
 					)
 				})}
@@ -70,6 +79,7 @@ const ItemContainer = styled.div`
 	border-radius: 10px;
 	cursor: pointer;
 	transition: 0.3s;
+	justify-content: space-between;
 	&:hover {
 		background-color: ${({ theme }) => theme.bgtotal};
 	}

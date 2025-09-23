@@ -10,18 +10,44 @@ import {
 	CardProductoSelect,
 	useKardexStore,
 	useUsuariosStore,
+	useFechasInventariosStore,
+	useColoresStore,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export function RegistrarKardex({ onClose, tipo }) {
+export function RegistrarKardex({ onClose, accion, dataSelect }) {
 	const [stateListaProd, setStateListaProd] = useState(false)
+	const [stateListaColores, setStateListaColores] = useState(false)
 
-	const { insertarKardex } = useKardexStore()
+	const { insertarKardex, editarKardex } = useKardexStore()
 	const { dataempresa } = useEmpresaStore()
-	const { dataproductos, setBuscador, selectProductos, productosItemSelect } =
-		useProductosStore()
+	const {
+		dataproductos,
+		setBuscador: setBuscadorProductos,
+		selectProductos,
+		productosItemSelect,
+	} = useProductosStore()
+	const {
+		datacolores,
+		setBuscador: setBuscadorColores,
+		selectColores,
+		coloresItemSelect,
+	} = useColoresStore()
 	const { idusuario } = useUsuariosStore()
+	const { datafechainventrioactivo } = useFechasInventariosStore()
+
+	useEffect(() => {
+		if (accion === 'Editar' && dataSelect) {
+			selectProductos({
+				id: dataSelect.id_producto,
+				descripcion: dataSelect.descripcion,
+				codigo: dataSelect.codigo,
+				unidad_medida: dataSelect.unidad_medida,
+			})
+			selectColores({ id: dataSelect.id_color, color: dataSelect.color })
+		}
+	}, [accion, dataSelect])
 
 	const {
 		register,
@@ -30,18 +56,32 @@ export function RegistrarKardex({ onClose, tipo }) {
 	} = useForm()
 
 	const insertar = async (data) => {
-		const p = {
-			fecha: new Date(),
-			tipo: tipo,
-			id_usuario: idusuario,
-			cantidad: parseFloat(data.cantidad),
-			detalle: data.detalle,
-			id_empresa: dataempresa.id,
-			id_producto: productosItemSelect.id,
-		}
+		if (accion === 'Editar') {
+			const p = {
+				id: dataSelect.id,
+				cantidad: parseFloat(data.cantidad),
+				id_usuario: idusuario,
+				id_producto: productosItemSelect.id,
+				id_empresa: dataempresa.id,
+				id_color: coloresItemSelect.id,
+				id_fecha_inventario: datafechainventrioactivo.id,
+			}
 
-		await insertarKardex(p)
-		onClose()
+			await editarKardex(p)
+			onClose()
+		} else {
+			const p = {
+				cantidad: parseFloat(data.cantidad),
+				id_usuario: idusuario,
+				id_producto: productosItemSelect.id,
+				id_empresa: dataempresa.id,
+				id_color: coloresItemSelect.id,
+				id_fecha_inventario: datafechainventrioactivo.id,
+			}
+
+			await insertarKardex(p)
+			onClose()
+		}
 	}
 
 	return (
@@ -49,16 +89,40 @@ export function RegistrarKardex({ onClose, tipo }) {
 			<div className="sub-contenedor">
 				<div className="headers">
 					<section>
-						<h1>Nueva {tipo == 'entrada' ? 'entrada' : 'salida'}</h1>
+						<h1>{accion === 'Editar' ? 'Editar ingreso' : 'Nuevo ingreso'}</h1>
 					</section>
 
 					<section>
 						<span onClick={onClose}>x</span>
 					</section>
 				</div>
+				<article>
+					<InputText icono={<_v.iconofecha />}>
+						<input
+							disabled
+							className="form__field disabled"
+							style={{ marginBottom: '10px' }}
+							defaultValue={
+								datafechainventrioactivo ? datafechainventrioactivo.fecha : ''
+							}
+							type="text"
+							placeholder=""
+							{...register('fecha_inventario', {
+								required: true,
+							})}
+						/>
+						<label className="form__label">Fecha inventario</label>
+						{errors.fecha_inventario?.type === 'required' && (
+							<p>Hace falta que el admin seleccione una fecha</p>
+						)}
+					</InputText>
+				</article>
 				<div className="contentBuscador">
 					<div onClick={() => setStateListaProd(!stateListaProd)}>
-						<Buscador setBuscador={setBuscador} />
+						<Buscador
+							setBuscador={setBuscadorProductos}
+							placeholderText="...buscar producto"
+						/>
 					</div>
 					{stateListaProd && (
 						<ListaGenerica
@@ -67,13 +131,33 @@ export function RegistrarKardex({ onClose, tipo }) {
 							bottom="-250px"
 							scroll="scroll"
 							funcion={selectProductos}
+							showCodigo
 						/>
 					)}
 				</div>
 				<CardProductoSelect
 					text1={productosItemSelect.descripcion}
-					text2={productosItemSelect.stock}
+					text2={productosItemSelect.codigo}
 				/>
+				<div className="contentBuscador">
+					<div onClick={() => setStateListaColores(!stateListaColores)}>
+						<Buscador
+							setBuscador={setBuscadorColores}
+							placeholderText="...buscar color"
+						/>
+					</div>
+					{stateListaColores && (
+						<ListaGenerica
+							data={datacolores}
+							setState={() => setStateListaColores(!stateListaColores)}
+							bottom="-250px"
+							scroll="scroll"
+							funcion={selectColores}
+							colorType
+						/>
+					)}
+				</div>
+				<CardProductoSelect text1={coloresItemSelect.color} />
 
 				<form
 					className="formulario"
@@ -81,9 +165,26 @@ export function RegistrarKardex({ onClose, tipo }) {
 				>
 					<section>
 						<article>
+							<InputText icono={<_v.iconofecha />}>
+								<input
+									disabled
+									className="form__field disabled"
+									value={productosItemSelect?.unidad_medida || ''}
+									type="text"
+									placeholder=""
+									{...register('unidad_medida', {
+										required: true,
+									})}
+								/>
+								<label className="form__label">Unidad medida</label>
+								{errors.cantidad?.type === 'required' && <p>Campo requerido</p>}
+							</InputText>
+						</article>
+						<article>
 							<InputText icono={<_v.iconocalculadora />}>
 								<input
 									className="form__field"
+									defaultValue={dataSelect.cantidad}
 									type="number"
 									placeholder=""
 									{...register('cantidad', {
@@ -92,20 +193,6 @@ export function RegistrarKardex({ onClose, tipo }) {
 								/>
 								<label className="form__label">cantidad</label>
 								{errors.cantidad?.type === 'required' && <p>Campo requerido</p>}
-							</InputText>
-						</article>
-						<article>
-							<InputText icono={<_v.iconotodos />}>
-								<input
-									className="form__field"
-									type="text"
-									placeholder=""
-									{...register('detalle', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">motivo</label>
-								{errors.detalle?.type === 'required' && <p>Campo requerido</p>}
 							</InputText>
 						</article>
 

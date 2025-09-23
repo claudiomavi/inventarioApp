@@ -15,18 +15,13 @@ import { useState } from 'react'
 export function KardexTemplate({ data }) {
 	const [state, setState] = useState(false)
 	const [openRegistro, setOpenRegistro] = useState(false)
-	const [tipo, setTipo] = useState('')
+	const [accion, setAccion] = useState('')
+	const [dataSelect, setDataSelect] = useState([])
 
 	const { setBuscador } = useKardexStore()
 
 	const nuevaEntrada = () => {
 		setOpenRegistro(true)
-		setTipo('entrada')
-	}
-
-	const nuevaSalida = () => {
-		setOpenRegistro(true)
-		setTipo('salida')
 	}
 
 	return (
@@ -34,7 +29,8 @@ export function KardexTemplate({ data }) {
 			{openRegistro && (
 				<RegistrarKardex
 					onClose={() => setOpenRegistro(!openRegistro)}
-					tipo={tipo}
+					accion={accion}
+					dataSelect={dataSelect}
 				/>
 			)}
 
@@ -48,13 +44,8 @@ export function KardexTemplate({ data }) {
 					<Title>Kardex</Title>
 					<Btnsave
 						bgcolor="#52de65"
-						titulo="+ Entrada"
+						titulo="+ Ingresar"
 						funcion={nuevaEntrada}
-					/>
-					<Btnsave
-						bgcolor="#fb6661"
-						titulo="- Salida"
-						funcion={nuevaSalida}
 					/>
 				</ContentFiltro>
 			</section>
@@ -62,7 +53,13 @@ export function KardexTemplate({ data }) {
 				<Buscador setBuscador={setBuscador} />
 			</section>
 			<section className="main">
-				<Tabs data={data} />
+				<Tabs
+					data={data}
+					setAccion={setAccion}
+					setOpenRegistro={setOpenRegistro}
+					dataSelect={dataSelect}
+					setDataSelect={setDataSelect}
+				/>
 			</section>
 		</Container>
 	)

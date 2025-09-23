@@ -62,3 +62,16 @@ export const BuscarFechasInventarios = async (p) => {
 
 	return data
 }
+
+export const FechaInventarioActivo = async (p) => {
+	const { data, error } = await supabase
+		.from('fechas-inventarios')
+		.select('*')
+		.eq('id_empresa', p.id_empresa)
+		.eq('activo', true)
+		.single()
+
+	if (error) return
+
+	return data
+}

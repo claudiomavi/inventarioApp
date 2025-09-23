@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { FaSearch } from 'react-icons/fa'
 
-export function Buscador({ setBuscador, funcion }) {
+export function Buscador({ setBuscador, funcion, placeholderText }) {
 	const buscar = (e) => {
 		setBuscador(e.target.value)
 	}
@@ -16,7 +16,7 @@ export function Buscador({ setBuscador, funcion }) {
 				<FaSearch className="icon" />
 				<input
 					onChange={buscar}
-					placeholder="...buscar"
+					placeholder={placeholderText ? placeholderText : '...buscar'}
 				></input>
 			</article>
 		</Container>

@@ -3,6 +3,7 @@ import {
 	BuscarFechasInventarios,
 	EditarFechasInventarios,
 	EliminarFechasInventarios,
+	FechaInventarioActivo,
 	InsertarFechasInventarios,
 	MostrarFechasInventarios,
 } from '../autoBarrell'
@@ -16,6 +17,7 @@ export const useFechasInventariosStore = create((set, get) => ({
 	datafechasinventarios: [],
 	fechasinventariosItemSelect: [],
 	parametros: {},
+	datafechainventrioactivo: [],
 
 	mostrarFechasInventarios: async (p) => {
 		const response = await MostrarFechasInventarios(p)
@@ -59,6 +61,13 @@ export const useFechasInventariosStore = create((set, get) => ({
 		const response = await BuscarFechasInventarios(p)
 
 		set({ datafechasinventarios: response })
+		return response
+	},
+
+	fechaInventarioActivo: async (p) => {
+		const response = await FechaInventarioActivo(p)
+
+		set({ datafechainventrioactivo: response })
 		return response
 	},
 }))

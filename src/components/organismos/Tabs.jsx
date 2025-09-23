@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { v as _v, Device, TablaKardex } from '../../autoBarrell'
 
-export function Tabs({ data }) {
+export function Tabs({ data, setAccion, setOpenRegistro, setDataSelect }) {
 	const [activeTab, setActiveTab] = useState(0)
 
 	const handleClick = (index) => {
@@ -32,7 +32,12 @@ export function Tabs({ data }) {
 			<div className="tab-content">
 				{activeTab === 0 && (
 					<span>
-						<TablaKardex data={data} />
+						<TablaKardex
+							data={data}
+							setAccion={setAccion}
+							setOpenRegistro={setOpenRegistro}
+							setDataSelect={setDataSelect}
+						/>
 					</span>
 				)}
 				{activeTab === 1 && <span>tab{activeTab + 1}</span>}
