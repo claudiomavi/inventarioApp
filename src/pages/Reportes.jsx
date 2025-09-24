@@ -5,22 +5,22 @@ import {
 	ReportesTemplate,
 	SpinnerLoader,
 	useEmpresaStore,
-	useKardexStore,
+	useFechasInventariosStore,
 	useUsuariosStore,
 } from '../autoBarrell'
 
 export function Reportes() {
 	const { dataempresa } = useEmpresaStore()
 	const { datapermisos } = useUsuariosStore()
-	const { mostrarKardex } = useKardexStore()
+	const { mostrarFechasInventarios } = useFechasInventariosStore()
 
 	const statePermiso = datapermisos.some((item) =>
 		item.modulos.nombre.includes('Reportes')
 	)
 
-	const { isLoading, error } = useQuery({
-		queryKey: ['mostrar kardex', { _id_empresa: dataempresa?.id }],
-		queryFn: () => mostrarKardex({ _id_empresa: dataempresa?.id }),
+	const { data, isLoading, error } = useQuery({
+		queryKey: ['mostrar fechas inventarios', { id_empresa: dataempresa?.id }],
+		queryFn: () => mostrarFechasInventarios({ id_empresa: dataempresa?.id }),
 		enabled: dataempresa?.id != null,
 	})
 
@@ -30,5 +30,10 @@ export function Reportes() {
 
 	if (error) return <span>Error...</span>
 
-	return <ReportesTemplate />
+	return (
+		<ReportesTemplate
+			data={data}
+			dataempresa={dataempresa}
+		/>
+	)
 }

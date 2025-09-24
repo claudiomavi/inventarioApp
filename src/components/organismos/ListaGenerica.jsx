@@ -5,6 +5,7 @@ import { Device } from '../../styles/breackpoints'
 export function ListaGenerica({
 	showCodigo = false,
 	colorType = false,
+	fechaType = false,
 	data,
 	setState,
 	funcion,
@@ -34,6 +35,7 @@ export function ListaGenerica({
 							{showCodigo && <span>{item.codigo}</span>}
 							<span>{item.descripcion}</span>
 							{colorType && <span>{item.color}</span>}
+							{fechaType && <span>{item.fecha}</span>}
 						</ItemContainer>
 					)
 				})}

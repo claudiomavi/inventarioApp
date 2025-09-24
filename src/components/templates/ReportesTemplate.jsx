@@ -4,13 +4,20 @@ import {
 	Header,
 	Title,
 	v as _v,
-	Device,
+	useFechasInventariosStore,
+	ContainerSelector,
+	Selector,
+	ListaGenerica,
+	Btnsave,
+	ExportarInventarios,
 } from '../../autoBarrell'
 import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
 
-export function ReportesTemplate() {
+export function ReportesTemplate({ data, dataempresa }) {
 	const [state, setState] = useState(false)
+	const [stateFecha, setStateFecha] = useState(false)
+	const { selectFechasInventarios, fechasinventariosItemSelect } =
+		useFechasInventariosStore()
 
 	return (
 		<Container>
@@ -28,33 +35,39 @@ export function ReportesTemplate() {
 				<h1>Area 2</h1>
 			</section> */}
 			<section className="main">
-				<PageContainer>
-					<Sidebar>
-						<SidebarSection>
-							<SidebarTitle>Stock Actual</SidebarTitle>
-							<SidebarItem to="stock-actual-por-producto">
-								Por producto
-							</SidebarItem>
-							<SidebarItem to="stock-actual-todos">Todos</SidebarItem>
-							<SidebarItem to="stock-actual-bajo-minimo">
-								Bajo mínimo
-							</SidebarItem>
-						</SidebarSection>
-						<SidebarSection>
-							<SidebarTitle>Entradas y salidas</SidebarTitle>
-							<SidebarItem to="entradas-salidas-por-producto">
-								Por producto
-							</SidebarItem>
-						</SidebarSection>
-						<SidebarSection>
-							<SidebarTitle>Valorado</SidebarTitle>
-							<SidebarItem to="inventario-valorado">Inventario</SidebarItem>
-						</SidebarSection>
-					</Sidebar>
-					<Content>
-						<Outlet />
-					</Content>
-				</PageContainer>
+				<ContainerSelector>
+					<label>Fecha inventario: </label>
+					<Selector
+						color="#fc6027"
+						// texto1="🍿"
+						texto2={fechasinventariosItemSelect?.fecha}
+						state={stateFecha}
+						funcion={() => setStateFecha(!stateFecha)}
+					/>
+					{stateFecha && (
+						<ListaGenerica
+							bottom="-260px"
+							data={data}
+							scroll="scroll"
+							setState={() => setStateFecha(!stateFecha)}
+							funcion={selectFechasInventarios}
+							fechaType
+						/>
+					)}
+					<Btnsave
+						titulo="Descargar"
+						bgcolor="#ef552b"
+						funcion={() => {
+							if (fechasinventariosItemSelect) {
+								ExportarInventarios({
+									_id_empresa: dataempresa.id,
+									id_fecha_inventario: fechasinventariosItemSelect.id,
+									fecha_inventario: fechasinventariosItemSelect.fecha,
+								})
+							}
+						}}
+					/>
+				</ContainerSelector>
 			</section>
 		</Container>
 	)
@@ -91,72 +104,11 @@ const Container = styled.div`
 		justify-content: flex-end;
 	} */
 	.main {
+		margin-top: 60px;
 		grid-area: main;
+		display: flex;
+		align-items: start;
+		justify-content: center;
 		/* background-color: purple; */
-	}
-`
-
-const PageContainer = styled.div`
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	max-width: 1200px;
-	justify-content: center;
-	width: 100%;
-	@media ${Device.tablet} {
-		flex-direction: row;
-	}
-`
-
-const Content = styled.div`
-	padding: 20px;
-	border-radius: 8px;
-	margin: 20px;
-	flex: 1;
-`
-
-const Sidebar = styled.div`
-	padding: 20px;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	@media ${Device.tablet} {
-		width: 250px;
-		order: 2;
-	}
-`
-
-const SidebarSection = styled.div`
-	margin-bottom: 20px;
-	border-radius: 10px;
-	border: 2px solid ${({ theme }) => theme.color2};
-	padding: 12px;
-`
-
-const SidebarTitle = styled.h3`
-	margin-bottom: 20px;
-	font-size: 1.2em;
-`
-
-const SidebarItem = styled(NavLink)`
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	padding: 10px;
-	border-radius: 12px;
-	cursor: pointer;
-	margin: 5px 0;
-	padding: 0 5%;
-	text-decoration: none;
-	color: ${({ theme }) => theme.text};
-	height: 60px;
-	&:hover {
-		color: ${({ theme }) => theme.colorSubtitle};
-	}
-	&.active {
-		background: ${({ theme }) => theme.bg6};
-		border: 2px solid ${({ theme }) => theme.bg5};
-		color: ${({ theme }) => theme.color1};
-		font-weight: 600;
 	}
 `
