@@ -135,10 +135,12 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 						/>
 					)}
 				</div>
-				<CardProductoSelect
-					text1={productosItemSelect.descripcion}
-					text2={productosItemSelect.codigo}
-				/>
+				{productosItemSelect && (
+					<CardProductoSelect
+						text1={productosItemSelect.descripcion}
+						text2={productosItemSelect.codigo}
+					/>
+				)}
 				<div className="contentBuscador">
 					<div onClick={() => setStateListaColores(!stateListaColores)}>
 						<Buscador
@@ -157,7 +159,9 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 						/>
 					)}
 				</div>
-				<CardProductoSelect text1={coloresItemSelect.color} />
+				{coloresItemSelect && (
+					<CardProductoSelect text1={coloresItemSelect.color} />
+				)}
 
 				<form
 					className="formulario"
