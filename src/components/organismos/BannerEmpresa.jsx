@@ -171,6 +171,7 @@ const Container = styled.div`
 
 const ContentCards = styled.div`
 	display: flex;
+	justify-content: space-around;
 	gap: 10px;
 	padding-top: 15px;
 	cursor: pointer;

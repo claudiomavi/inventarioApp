@@ -19,7 +19,7 @@ export function CardDatosEmpresa({ titulo, valor, img }) {
 const Container = styled.div`
 	z-index: 1;
 	.card {
-		width: 190px;
+		width: 100%;
 		background: #fffefe;
 		padding: 1rem;
 		border-radius: 1rem;

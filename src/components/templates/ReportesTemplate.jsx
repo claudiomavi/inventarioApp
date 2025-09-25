@@ -10,6 +10,7 @@ import {
 	ListaGenerica,
 	Btnsave,
 	ExportarInventarios,
+	Device,
 } from '../../autoBarrell'
 import { useState } from 'react'
 
@@ -36,14 +37,16 @@ export function ReportesTemplate({ data, dataempresa }) {
 			</section> */}
 			<section className="main">
 				<ContainerSelector>
-					<label>Fecha inventario: </label>
-					<Selector
-						color="#fc6027"
-						// texto1="🍿"
-						texto2={fechasinventariosItemSelect?.fecha}
-						state={stateFecha}
-						funcion={() => setStateFecha(!stateFecha)}
-					/>
+					<div className="desplegableInventario">
+						<label>Fecha inventario: </label>
+						<Selector
+							color="#fc6027"
+							// texto1="🍿"
+							texto2={fechasinventariosItemSelect?.fecha}
+							state={stateFecha}
+							funcion={() => setStateFecha(!stateFecha)}
+						/>
+					</div>
 					{stateFecha && (
 						<ListaGenerica
 							bottom="-260px"
@@ -104,11 +107,24 @@ const Container = styled.div`
 		justify-content: flex-end;
 	} */
 	.main {
+		width: 100%;
 		margin-top: 60px;
 		grid-area: main;
 		display: flex;
 		align-items: start;
 		justify-content: center;
 		/* background-color: purple; */
+		.desplegableInventario {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin-bottom: 30px;
+			gap: 10px;
+			@media ${Device.tablet} {
+				flex-direction: row;
+				margin-bottom: 0;
+			}
+		}
 	}
 `
