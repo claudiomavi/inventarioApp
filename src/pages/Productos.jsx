@@ -25,12 +25,6 @@ export function Productos() {
 		item.modulos.nombre.includes('Productos')
 	)
 
-	const { isLoading, error } = useQuery({
-		queryKey: ['mostrar productos', { _id_empresa: dataempresa?.id }],
-		queryFn: () => mostrarProductos({ _id_empresa: dataempresa?.id }),
-		enabled: dataempresa?.id != null && !!datacategoriasmerceologicas?.length,
-	})
-
 	const { data: _datamarcas } = useQuery({
 		queryKey: ['mostrar marca', { id_empresa: dataempresa?.id }],
 		queryFn: () => mostrarMarca({ id_empresa: dataempresa?.id }),
@@ -53,6 +47,12 @@ export function Productos() {
 		enabled: dataempresa?.id != null,
 	})
 
+	const { isLoading, error } = useQuery({
+		queryKey: ['mostrar productos', { _id_empresa: dataempresa?.id }],
+		queryFn: () => mostrarProductos({ _id_empresa: dataempresa?.id }),
+		enabled: dataempresa?.id != null && !!datacategoriasmerceologicas?.length,
+	})
+
 	const { data: _buscardata } = useQuery({
 		queryKey: [
 			'buscar productos',
@@ -60,7 +60,7 @@ export function Productos() {
 		],
 		queryFn: () =>
 			buscarProductos({ id_empresa: dataempresa.id, descripcion: buscador }),
-		enabled: dataempresa.id != null,
+		enabled: dataempresa.id != null && !!datacategoriasmerceologicas?.length,
 	})
 
 	if (!statePermiso) return <BloqueoPagina state={statePermiso} />
