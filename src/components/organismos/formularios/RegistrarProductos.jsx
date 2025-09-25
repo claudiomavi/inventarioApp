@@ -27,10 +27,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		useState(false)
 	const [openRegistroMarca, setOpenRegistroMarca] = useState(false)
 	const [openRegistroCategorias, setOpenRegistroCategorias] = useState(false)
-	const [
-		openRegistroCategoriasMerceologicas,
-		setOpenRegistroCategoriasMerceologicas,
-	] = useState(false)
 	const [subaccion, setSubaccion] = useState('')
 
 	const { insertarProductos, editarProductos } = useProductosStore()
@@ -128,11 +124,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 
 	const nuevoRegistroCategoria = () => {
 		setOpenRegistroCategorias(!openRegistroCategorias)
-		setSubaccion('Nuevo')
-	}
-
-	const nuevoRegistroCategoriaMerceologica = () => {
-		setOpenRegistroCategoriasMerceologicas(!openRegistroCategoriasMerceologicas)
 		setSubaccion('Nuevo')
 	}
 
@@ -249,12 +240,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 									funcion={selectCategoriasMerceologicas}
 								/>
 							)}
-							<Btnfiltro
-								bgcolor="#f6f3f3"
-								textcolor="#353535"
-								icono={<_v.agregar />}
-								funcion={nuevoRegistroCategoriaMerceologica}
-							/>
 						</ContainerSelector>
 					</section>
 

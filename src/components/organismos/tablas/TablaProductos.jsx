@@ -8,7 +8,6 @@ import {
 } from '@tanstack/react-table'
 import styled from 'styled-components'
 import {
-	ColorContent,
 	ColorContentTable,
 	ContentAccionesTabla,
 	Paginacion,
@@ -166,7 +165,7 @@ export function TablaProductos({
 		getFilteredRowModel: getFilteredRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		initialState: { pagination: { pageSize: 5 } },
+		initialState: { pagination: { pageSize: v.pageSize } },
 	})
 
 	return (

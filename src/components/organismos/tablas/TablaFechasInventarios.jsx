@@ -99,7 +99,7 @@ export function TablaFechasInventarios({
 		getFilteredRowModel: getFilteredRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getPaginationRowModel: getPaginationRowModel(),
-		initialState: { pagination: { pageSize: 5 } },
+		initialState: { pagination: { pageSize: v.pageSize } },
 	})
 
 	return (

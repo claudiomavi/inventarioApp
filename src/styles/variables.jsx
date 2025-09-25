@@ -122,4 +122,6 @@ export const v = {
 	iconoprev: GrFormPrevious,
 	icononext: GrCaretNext,
 	iconotodos: MdOutlineBorderAll,
+
+	pageSize: 10,
 }

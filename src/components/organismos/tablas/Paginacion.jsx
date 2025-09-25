@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { v } from '../../../autoBarrell'
+import { v as _v } from '../../../autoBarrell'
 
 export function Paginacion({ table, irinicio, pagina, maximo }) {
 	return (
@@ -9,7 +9,7 @@ export function Paginacion({ table, irinicio, pagina, maximo }) {
 				onClick={() => irinicio()}
 			>
 				<span className="iconos">
-					<v.iconotodos />
+					<_v.iconotodos />
 				</span>
 			</button>
 			<button
@@ -17,7 +17,7 @@ export function Paginacion({ table, irinicio, pagina, maximo }) {
 				onClick={() => table.previousPage()}
 			>
 				<span className="iconos izquierda">
-					<v.iconoflechaderecha />
+					<_v.iconoflechaderecha />
 				</span>
 			</button>
 			<span>{pagina}</span>
@@ -27,7 +27,7 @@ export function Paginacion({ table, irinicio, pagina, maximo }) {
 				onClick={() => table.nextPage()}
 			>
 				<span className="iconos">
-					<v.iconoflechaderecha />
+					<_v.iconoflechaderecha />
 				</span>
 			</button>
 		</Container>
