@@ -2,7 +2,7 @@ name: Ping Supabase para mantener activo
 
 on:
   schedule:
-    - cron: '0 0 */5 * *' # Cada 5 días a medianoche UTC
+    - cron: '0 0 */2 * *' # Cada 2 días a medianoche UTC
   workflow_dispatch: # Permite lanzarlo manualmente
 
 jobs:
