@@ -11,6 +11,6 @@ jobs:
 
     steps:
       - name: Enviar ping a Supabase
-        run: |
-          curl -X GET "https://esmrrrqdyoozsrklslzk.supabase.co/rest/v1/modulos?select=*" \
-          -H "apikey: ${{ secrets.SUPABASE_API_KEY }}"
+      run: | 
+        curl -i -X GET "https://esmrrrqdyoozsrklslzk.supabase.co/rest/v1/pg_catalog.pg_tables?select=tablename" \
+        -H "apikey: ${{ secrets.SUPABASE_API_KEY }}"
