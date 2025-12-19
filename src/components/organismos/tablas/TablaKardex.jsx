@@ -71,10 +71,10 @@ export function TablaKardex({
 		},
 		{
 			accessorKey: 'descripcion',
-			header: 'Producto',
+			header: 'Descripción',
 			cell: (info) => (
 				<td
-					data-title="Producto"
+					data-title="Descripción"
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
@@ -107,10 +107,10 @@ export function TablaKardex({
 		},
 		{
 			accessorKey: 'unidad_medida',
-			header: 'Unidad medida',
+			header: 'UM',
 			cell: (info) => (
 				<td
-					data-title="Unidad medida"
+					data-title="UM"
 					className="content-cell"
 				>
 					<span>{info.getValue()}</span>
