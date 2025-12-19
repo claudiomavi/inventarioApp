@@ -82,6 +82,18 @@ export function TablaKardex({
 			),
 		},
 		{
+			accessorKey: 'nombres',
+			header: 'Usuario',
+			cell: (info) => (
+				<td
+					data-title="Usuario"
+					className="content-cell"
+				>
+					<span>{info.getValue()}</span>
+				</td>
+			),
+		},
+		{
 			accessorKey: 'color',
 			header: 'Color',
 			cell: (info) => (
