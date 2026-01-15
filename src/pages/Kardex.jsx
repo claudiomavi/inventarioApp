@@ -29,12 +29,18 @@ export function Kardex() {
 		buscarColores,
 	} = useColoresStore()
 	const { dataempresa } = useEmpresaStore()
-	const { datapermisos } = useUsuariosStore()
+	const { datapermisos, mostrarUsuarios } = useUsuariosStore()
 	const { fechaInventarioActivo } = useFechasInventariosStore()
 
 	const statePermiso = datapermisos.some((item) =>
 		item.modulos.nombre.includes('Kardex')
 	)
+
+	// Obtener datos del usuario actual
+	const { data: datausuario } = useQuery({
+		queryKey: ['mostrar usuario'],
+		queryFn: () => mostrarUsuarios(),
+	})
 
 	const { data: dataproductos } = useQuery({
 		queryKey: ['mostrar productos', { _id_empresa: dataempresa?.id }],
@@ -44,9 +50,12 @@ export function Kardex() {
 
 	// se concatena con la dataproductos que hay arriba para que se ejecute solo cuando ya exista
 	const { isLoading, error } = useQuery({
-		queryKey: ['mostrar kardex', { _id_empresa: dataempresa?.id }],
-		queryFn: () => mostrarKardex({ _id_empresa: dataempresa?.id }),
-		enabled: dataempresa?.id != null && !!dataproductos?.length,
+		queryKey: ['mostrar kardex', { _id_empresa: dataempresa?.id, _id_usuario: datausuario?.tipouser === 'empleado' ? datausuario?.id : null }],
+		queryFn: () => mostrarKardex({ 
+			_id_empresa: dataempresa?.id,
+			_id_usuario: datausuario?.tipouser === 'empleado' ? datausuario?.id : null
+		}),
+		enabled: dataempresa?.id != null && !!dataproductos?.length && datausuario?.id != null,
 	})
 
 	const { data: _datacolores } = useQuery({
@@ -81,14 +90,15 @@ export function Kardex() {
 	const { data: _buscarkardex } = useQuery({
 		queryKey: [
 			'buscar kardex',
-			{ _id_empresa: dataempresa.id, buscador: buscadorkardex },
+			{ _id_empresa: dataempresa.id, buscador: buscadorkardex, _id_usuario: datausuario?.tipouser === 'empleado' ? datausuario?.id : null },
 		],
 		queryFn: () =>
 			buscarKardex({
 				_id_empresa: dataempresa.id,
 				buscador: buscadorkardex,
+				_id_usuario: datausuario?.tipouser === 'empleado' ? datausuario?.id : null
 			}),
-		enabled: dataempresa.id != null,
+		enabled: dataempresa.id != null && datausuario?.id != null,
 	})
 
 	const { data: _inventarioactivo } = useQuery({
