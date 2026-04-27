@@ -136,6 +136,16 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		setColoresAsignados(coloresAsignados.filter((c) => c.id_color !== id_color))
 	}
 
+	const actualizarPrecioColor = (id_color, nuevoPrecio) => {
+		setColoresAsignados(
+			coloresAsignados.map((c) =>
+				c.id_color === id_color
+					? { ...c, precio: parseFloat(nuevoPrecio) || 0 }
+					: c
+			)
+		)
+	}
+
 	const seleccionarColorTemp = (item) => {
 		setColorSeleccionadoTemp(item)
 	}
@@ -441,9 +451,15 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 										key={c.id_color}
 									>
 										<span className="colorNombre">{c.color}</span>
-										<span className="colorPrecio">
-											{c.precio.toFixed(2)}
-										</span>
+										<input
+											className="colorPrecioInput"
+											type="number"
+											step="0.01"
+											value={c.precio}
+											onChange={(e) =>
+												actualizarPrecioColor(c.id_color, e.target.value)
+											}
+										/>
 										<span
 											className="colorEliminar"
 											onClick={() => quitarColor(c.id_color)}
@@ -581,9 +597,19 @@ const Container = styled.div`
 							flex: 1;
 							font-weight: 500;
 						}
-						.colorPrecio {
+						.colorPrecioInput {
+							width: 90px;
+							padding: 4px 8px;
+							border: 1px solid ${({ theme }) => theme.bg4};
+							border-radius: 6px;
+							background: ${({ theme }) => theme.bg};
 							color: ${({ theme }) => theme.bg5};
 							font-weight: 600;
+							font-size: 14px;
+							outline: none;
+							&:focus {
+								border-color: ${({ theme }) => theme.bg5};
+							}
 						}
 						.colorEliminar {
 							cursor: pointer;
