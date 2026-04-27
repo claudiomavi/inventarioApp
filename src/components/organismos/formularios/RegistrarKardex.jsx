@@ -11,7 +11,7 @@ import {
 	useKardexStore,
 	useUsuariosStore,
 	useFechasInventariosStore,
-	useColoresStore,
+	MostrarProductoColores,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
@@ -19,6 +19,9 @@ import { useEffect, useState } from 'react'
 export function RegistrarKardex({ onClose, accion, dataSelect }) {
 	const [stateListaProd, setStateListaProd] = useState(false)
 	const [stateListaColores, setStateListaColores] = useState(false)
+	const [coloresProducto, setColoresProducto] = useState([])
+	const [colorSeleccionado, setColorSeleccionado] = useState(null)
+	const [cargandoColores, setCargandoColores] = useState(false)
 
 	const { insertarKardex, editarKardex } = useKardexStore()
 	const { dataempresa } = useEmpresaStore()
@@ -28,14 +31,33 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 		selectProductos,
 		productosItemSelect,
 	} = useProductosStore()
-	const {
-		datacolores,
-		setBuscador: setBuscadorColores,
-		selectColores,
-		coloresItemSelect,
-	} = useColoresStore()
 	const { idusuario } = useUsuariosStore()
 	const { datafechainventrioactivo } = useFechasInventariosStore()
+
+	const cargarColoresDelProducto = async (idProducto) => {
+		setCargandoColores(true)
+		const colores = await MostrarProductoColores({ id_producto: idProducto })
+		const mapped = (colores || []).map((pc) => ({
+			id: pc.id_color,
+			color: pc.colores?.color || '',
+			precio: pc.precio,
+		}))
+		setColoresProducto(mapped)
+
+		if (mapped.length === 1) {
+			setColorSeleccionado(mapped[0])
+		} else {
+			setColorSeleccionado(null)
+		}
+		setCargandoColores(false)
+	}
+
+	const seleccionarProducto = (item) => {
+		selectProductos(item)
+		setColorSeleccionado(null)
+		setColoresProducto([])
+		cargarColoresDelProducto(item.id)
+	}
 
 	useEffect(() => {
 		if (accion === 'Editar' && dataSelect) {
@@ -45,7 +67,12 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 				codigo: dataSelect.codigo,
 				unidad_medida: dataSelect.unidad_medida,
 			})
-			selectColores({ id: dataSelect.id_color, color: dataSelect.color })
+			cargarColoresDelProducto(dataSelect.id_producto).then(() => {
+				setColorSeleccionado({
+					id: dataSelect.id_color,
+					color: dataSelect.color,
+				})
+			})
 		}
 	}, [accion, dataSelect])
 
@@ -55,6 +82,10 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 		handleSubmit,
 	} = useForm()
 
+	const seleccionarColor = (item) => {
+		setColorSeleccionado(item)
+	}
+
 	const insertar = async (data) => {
 		if (accion === 'Editar') {
 			const p = {
@@ -63,7 +94,7 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 				id_usuario: idusuario,
 				id_producto: productosItemSelect.id,
 				id_empresa: dataempresa.id,
-				id_color: coloresItemSelect.id,
+				id_color: colorSeleccionado?.id,
 				id_fecha_inventario: datafechainventrioactivo.id,
 			}
 
@@ -75,7 +106,7 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 				id_usuario: idusuario,
 				id_producto: productosItemSelect.id,
 				id_empresa: dataempresa.id,
-				id_color: coloresItemSelect.id,
+				id_color: colorSeleccionado?.id,
 				id_fecha_inventario: datafechainventrioactivo.id,
 			}
 
@@ -83,6 +114,10 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 			onClose()
 		}
 	}
+
+	const soloUnColor = coloresProducto.length === 1
+	const sinColores = coloresProducto.length === 0
+	const productoSeleccionado = !!productosItemSelect?.id
 
 	return (
 		<Container>
@@ -130,7 +165,7 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 							setState={() => setStateListaProd(!stateListaProd)}
 							bottom="-250px"
 							scroll="scroll"
-							funcion={selectProductos}
+							funcion={seleccionarProducto}
 							showCodigo
 						/>
 					)}
@@ -141,26 +176,56 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 						text2={productosItemSelect.codigo}
 					/>
 				)}
-				<div className="contentBuscador">
-					<div onClick={() => setStateListaColores(!stateListaColores)}>
-						<Buscador
-							setBuscador={setBuscadorColores}
-							placeholderText="...buscar color"
-						/>
-					</div>
-					{stateListaColores && (
-						<ListaGenerica
-							data={datacolores}
-							setState={() => setStateListaColores(!stateListaColores)}
-							bottom="-250px"
-							scroll="scroll"
-							funcion={selectColores}
-							colorType
-						/>
-					)}
-				</div>
-				{coloresItemSelect && (
-					<CardProductoSelect text1={coloresItemSelect.color} />
+
+				{productoSeleccionado && !cargandoColores && (
+					<>
+						{sinColores ? (
+							<MensajeInfo>
+								Este producto no tiene colores asignados.
+							</MensajeInfo>
+						) : soloUnColor ? (
+							<CardColorSeleccionado>
+								<span className="label">Color:</span>
+								<span className="colorNombre">
+									{colorSeleccionado?.color}
+								</span>
+							</CardColorSeleccionado>
+						) : (
+							<>
+								<div className="contentBuscador">
+									<div
+										onClick={() =>
+											setStateListaColores(!stateListaColores)
+										}
+									>
+										<Buscador
+											setBuscador={() => {}}
+											placeholderText="...buscar color"
+										/>
+									</div>
+									{stateListaColores && (
+										<ListaGenerica
+											data={coloresProducto}
+											setState={() =>
+												setStateListaColores(!stateListaColores)
+											}
+											bottom="-250px"
+											scroll="scroll"
+											funcion={seleccionarColor}
+											colorType
+										/>
+									)}
+								</div>
+								{colorSeleccionado && (
+									<CardColorSeleccionado>
+										<span className="colorNombre">
+											{colorSeleccionado.color}
+										</span>
+									</CardColorSeleccionado>
+								)}
+							</>
+						)}
+					</>
 				)}
 
 				<form
@@ -267,6 +332,37 @@ const Container = styled.div`
 			}
 		}
 	}
+`
+
+const MensajeInfo = styled.div`
+	margin: 10px 0;
+	padding: 10px;
+	border: 1px dashed #f0a354;
+	border-radius: 15px;
+	background-color: rgba(240, 163, 84, 0.1);
+	color: #f0a354;
+	font-weight: 500;
+	text-align: center;
+`
+
+const CardColorSeleccionado = styled.div`
+	margin: 10px 0;
+	display: flex;
+	align-items: center;
+	gap: 15px;
+	border: 1px dashed #54f05f;
+	border-radius: 15px;
+	background-color: rgba(84, 240, 79, 0.1);
+	padding: 10px;
+	.label {
+		color: ${({ theme }) => theme.text};
+		font-weight: 500;
+	}
+	.colorNombre {
+		color: #1fee61;
+		font-weight: 700;
+	}
+
 `
 
 const ContentTitle = styled.div`

@@ -5,6 +5,7 @@ import {
 	useProductosStore,
 	useEmpresaStore,
 	convertirCapitalize,
+	Buscador,
 	ContainerSelector,
 	Selector,
 	useMarcaStore,
@@ -16,6 +17,11 @@ import {
 	RegistrarCategorias,
 	Device,
 	useCategoriasMerceologicasStore,
+	useColoresStore,
+	useProductosColoresStore,
+	InsertarProductoColor,
+	EliminarProductoColoresPorProducto,
+	supabase,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
@@ -29,6 +35,12 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 	const [openRegistroCategorias, setOpenRegistroCategorias] = useState(false)
 	const [subaccion, setSubaccion] = useState('')
 
+	const [stateListaColores, setStateListaColores] = useState(false)
+	const [coloresAsignados, setColoresAsignados] = useState([])
+	const [precioColorTemp, setPrecioColorTemp] = useState('')
+	const [colorSeleccionadoTemp, setColorSeleccionadoTemp] = useState(null)
+	const [buscadorColor, setBuscadorColor] = useState('')
+
 	const { insertarProductos, editarProductos } = useProductosStore()
 	const { dataempresa } = useEmpresaStore()
 	const { marcaItemSelect, datamarca, selectMarca } = useMarcaStore()
@@ -39,6 +51,8 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		datacategoriasmerceologicas,
 		selectCategoriasMerceologicas,
 	} = useCategoriasMerceologicasStore()
+	const { datacolores } = useColoresStore()
+	const { mostrarProductoColores } = useProductosColoresStore()
 
 	const {
 		register,
@@ -46,7 +60,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		handleSubmit,
 	} = useForm()
 
-	// para que si se cambia de página en el navegador no vuelvan los valores por defecto en el desplegable de marca y categorias
 	useEffect(() => {
 		if (accion === 'Editar' && dataSelect) {
 			if (dataSelect.idmarca && datamarca?.length > 0) {
@@ -75,6 +88,8 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				if (categoriamerceologica)
 					selectCategoriasMerceologicas(categoriamerceologica)
 			}
+
+			cargarColoresProducto()
 		}
 	}, [
 		accion,
@@ -84,6 +99,60 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		datacategoriasmerceologicas,
 	])
 
+	const cargarColoresProducto = async () => {
+		if (dataSelect?.id) {
+			const colores = await mostrarProductoColores({
+				id_producto: dataSelect.id,
+			})
+			if (colores) {
+				const mapped = colores.map((pc) => ({
+					id: pc.id,
+					id_color: pc.id_color,
+					color: pc.colores?.color || '',
+					precio: pc.precio,
+				}))
+				setColoresAsignados(mapped)
+			}
+		}
+	}
+
+	const agregarColor = () => {
+		if (!colorSeleccionadoTemp || !precioColorTemp) return
+		const yaExiste = coloresAsignados.some(
+			(c) => c.id_color === colorSeleccionadoTemp.id
+		)
+		if (yaExiste) return
+
+		setColoresAsignados([
+			...coloresAsignados,
+			{
+				id_color: colorSeleccionadoTemp.id,
+				color: colorSeleccionadoTemp.color,
+				precio: parseFloat(precioColorTemp),
+			},
+		])
+		setColorSeleccionadoTemp(null)
+		setPrecioColorTemp('')
+	}
+
+	const quitarColor = (id_color) => {
+		setColoresAsignados(coloresAsignados.filter((c) => c.id_color !== id_color))
+	}
+
+	const actualizarPrecioColor = (id_color, nuevoPrecio) => {
+		setColoresAsignados(
+			coloresAsignados.map((c) =>
+				c.id_color === id_color
+					? { ...c, precio: parseFloat(nuevoPrecio) || 0 }
+					: c
+			)
+		)
+	}
+
+	const seleccionarColorTemp = (item) => {
+		setColorSeleccionadoTemp(item)
+	}
+
 	const insertar = async (data) => {
 		if (accion === 'Editar') {
 			const p = {
@@ -91,7 +160,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				descripcion: convertirCapitalize(data.descripcion),
 				idmarca: marcaItemSelect.id,
 				codigo: convertirCapitalize(data.codigo),
-				preciocompra: parseFloat(data.preciocompra),
 				id_categoria: categoriasItemSelect.id,
 				id_empresa: dataempresa.id,
 				unidad_medida: convertirCapitalize(data.unidad_medida),
@@ -99,13 +167,25 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 			}
 
 			await editarProductos(p)
+
+			await EliminarProductoColoresPorProducto({
+				id_producto: dataSelect.id,
+			})
+			for (const c of coloresAsignados) {
+				await InsertarProductoColor({
+					id_producto: dataSelect.id,
+					id_color: c.id_color,
+					precio: c.precio,
+					id_empresa: dataempresa.id,
+				})
+			}
+
 			onClose()
 		} else {
 			const p = {
 				_descripcion: convertirCapitalize(data.descripcion),
 				_idmarca: marcaItemSelect.id,
 				_codigo: convertirCapitalize(data.codigo),
-				_preciocompra: parseFloat(data.preciocompra),
 				_id_categoria: categoriasItemSelect.id,
 				_id_empresa: dataempresa.id,
 				_unidad_medida: convertirCapitalize(data.unidad_medida),
@@ -113,6 +193,29 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 			}
 
 			await insertarProductos(p)
+
+			if (coloresAsignados.length > 0) {
+				const { data: productoNuevo } = await supabase
+					.from('productos')
+					.select('id')
+					.eq('id_empresa', dataempresa.id)
+					.eq('codigo', convertirCapitalize(data.codigo))
+					.order('id', { ascending: false })
+					.limit(1)
+					.single()
+
+				if (productoNuevo?.id) {
+					for (const c of coloresAsignados) {
+						await InsertarProductoColor({
+							id_producto: productoNuevo.id,
+							id_color: c.id_color,
+							precio: c.precio,
+							id_empresa: dataempresa.id,
+						})
+					}
+				}
+			}
+
 			onClose()
 		}
 	}
@@ -126,6 +229,14 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		setOpenRegistroCategorias(!openRegistroCategorias)
 		setSubaccion('Nuevo')
 	}
+
+	const coloresDisponibles = datacolores
+		?.filter((c) => !coloresAsignados.some((ca) => ca.id_color === c.id))
+		?.filter((c) =>
+			buscadorColor
+				? c.color.toLowerCase().includes(buscadorColor.toLowerCase())
+				: true
+		)
 
 	return (
 		<Container>
@@ -170,7 +281,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 							<label>Marca: </label>
 							<Selector
 								color="#fc6027"
-								// texto1="🍿"
 								texto2={marcaItemSelect?.descripcion}
 								state={stateMarca}
 								funcion={() => setStateMarca(!stateMarca)}
@@ -195,7 +305,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 							<label>Categoria: </label>
 							<Selector
 								color="#fc6027"
-								// texto1="🍿"
 								texto2={categoriasItemSelect?.descripcion}
 								state={stateCategorias}
 								funcion={() => setStateCategorias(!stateCategorias)}
@@ -220,7 +329,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 							<label>Categoria Merceologica: </label>
 							<Selector
 								color="#fc6027"
-								// texto1="🍿"
 								texto2={categoriasmerceologicasItemSelect?.descripcion}
 								state={stateCategoriasMerceologicas}
 								funcion={() =>
@@ -261,24 +369,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 								)}
 							</InputText>
 						</article>
-						<article>
-							<InputText icono={<_v.iconopreciocompra />}>
-								<input
-									step="0.01"
-									className="form__field"
-									defaultValue={dataSelect.preciocompra}
-									type="number"
-									placeholder=""
-									{...register('preciocompra', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">precio de compra</label>
-								{errors.preciocompra?.type === 'required' && (
-									<p>Campo requerido</p>
-								)}
-							</InputText>
-						</article>
+
 						<article>
 							<InputText icono={<_v.iconounidadmedida />}>
 								<input
@@ -296,6 +387,87 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 								)}
 							</InputText>
 						</article>
+					</section>
+
+					<section className="seccionColores">
+						<h3>Colores disponibles</h3>
+						<div className="agregarColorContent">
+							<div className="colorSelectorWrapper">
+								<div
+									className="contentBuscadorColor"
+									onClick={() => setStateListaColores(!stateListaColores)}
+								>
+									<Buscador
+										setBuscador={setBuscadorColor}
+										placeholderText="...buscar color"
+									/>
+								</div>
+								{stateListaColores && (
+									<ListaGenerica
+										bottom="-260px"
+										data={coloresDisponibles}
+										scroll="scroll"
+										setState={() =>
+											setStateListaColores(!stateListaColores)
+										}
+										funcion={seleccionarColorTemp}
+										colorType
+									/>
+								)}
+								{colorSeleccionadoTemp && (
+									<span className="colorSeleccionadoLabel">
+										{colorSeleccionadoTemp.color}
+									</span>
+								)}
+							</div>
+							<div className="precioColorWrapper">
+								<InputText icono={<_v.iconopreciocompra />}>
+									<input
+										className="form__field"
+										type="number"
+										step="0.01"
+										placeholder=""
+										value={precioColorTemp}
+										onChange={(e) => setPrecioColorTemp(e.target.value)}
+									/>
+									<label className="form__label">precio</label>
+								</InputText>
+							</div>
+							<Btnfiltro
+								bgcolor="#52de65"
+								textcolor="#fff"
+								icono={<_v.agregar />}
+								funcion={agregarColor}
+							/>
+						</div>
+
+						{coloresAsignados.length > 0 && (
+							<div className="listaColoresAsignados">
+								{coloresAsignados.map((c) => (
+									<div
+										className="colorAsignadoItem"
+										key={c.id_color}
+									>
+										<span className="colorNombre">{c.color}</span>
+										<input
+											className="colorPrecioInput"
+											type="number"
+											step="0.01"
+											value={c.precio}
+											onChange={(e) =>
+												actualizarPrecioColor(c.id_color, e.target.value)
+											}
+										/>
+										<span
+											className="colorEliminar"
+											onClick={() => quitarColor(c.id_color)}
+										>
+											x
+										</span>
+									</div>
+								))}
+							</div>
+						)}
 					</section>
 
 					<div className="btnguardarContent">
@@ -383,6 +555,85 @@ const Container = styled.div`
 				gap: 20px;
 				display: flex;
 				flex-direction: column;
+			}
+			.seccionColores {
+				grid-column: 1 / -1;
+				border-top: 1px solid ${({ theme }) => theme.bg4};
+				padding-top: 15px;
+				h3 {
+					font-size: 16px;
+					font-weight: 600;
+					margin-bottom: 10px;
+				}
+				.agregarColorContent {
+					display: flex;
+					align-items: flex-end;
+					gap: 10px;
+					flex-wrap: wrap;
+					.colorSelectorWrapper {
+						flex: 1;
+						min-width: 150px;
+						position: relative;
+						.contentBuscadorColor {
+							position: relative;
+						}
+						.colorSeleccionadoLabel {
+							display: inline-block;
+							margin-top: 6px;
+							padding: 4px 10px;
+							border-radius: 8px;
+							background: rgba(84, 240, 79, 0.15);
+							color: #1fee61;
+							font-weight: 600;
+							font-size: 13px;
+						}
+					}
+					.precioColorWrapper {
+						width: 150px;
+					}
+				}
+				.listaColoresAsignados {
+					margin-top: 15px;
+					display: flex;
+					flex-direction: column;
+					gap: 8px;
+					.colorAsignadoItem {
+						display: flex;
+						align-items: center;
+						gap: 15px;
+						padding: 8px 12px;
+						border-radius: 10px;
+						background: ${({ theme }) => theme.bgAlpha};
+						.colorNombre {
+							flex: 1;
+							font-weight: 500;
+						}
+						.colorPrecioInput {
+							width: 90px;
+							padding: 4px 8px;
+							border: 1px solid ${({ theme }) => theme.bg4};
+							border-radius: 6px;
+							background: ${({ theme }) => theme.bg};
+							color: ${({ theme }) => theme.bg5};
+							font-weight: 600;
+							font-size: 14px;
+							outline: none;
+							&:focus {
+								border-color: ${({ theme }) => theme.bg5};
+							}
+						}
+						.colorEliminar {
+							cursor: pointer;
+							color: #F54E41;
+							font-weight: 700;
+							font-size: 16px;
+							padding: 0 5px;
+							&:hover {
+								opacity: 0.7;
+							}
+						}
+					}
+				}
 			}
 			.btnguardarContent {
 				display: flex;
