@@ -21,6 +21,7 @@ import {
 	useProductosColoresStore,
 	InsertarProductoColor,
 	EliminarProductoColoresPorProducto,
+	supabase,
 } from '../../../autoBarrell'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
@@ -194,12 +195,19 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 			await insertarProductos(p)
 
 			if (coloresAsignados.length > 0) {
-				const { dataproductos } = useProductosStore.getState()
-				const productoCreado = dataproductos?.[dataproductos.length - 1]
-				if (productoCreado?.id) {
+				const { data: productoNuevo } = await supabase
+					.from('productos')
+					.select('id')
+					.eq('id_empresa', dataempresa.id)
+					.eq('codigo', convertirCapitalize(data.codigo))
+					.order('id', { ascending: false })
+					.limit(1)
+					.single()
+
+				if (productoNuevo?.id) {
 					for (const c of coloresAsignados) {
 						await InsertarProductoColor({
-							id_producto: productoCreado.id,
+							id_producto: productoNuevo.id,
 							id_color: c.id_color,
 							precio: c.precio,
 							id_empresa: dataempresa.id,
