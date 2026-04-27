@@ -159,7 +159,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				descripcion: convertirCapitalize(data.descripcion),
 				idmarca: marcaItemSelect.id,
 				codigo: convertirCapitalize(data.codigo),
-				preciocompra: parseFloat(data.preciocompra),
 				id_categoria: categoriasItemSelect.id,
 				id_empresa: dataempresa.id,
 				unidad_medida: convertirCapitalize(data.unidad_medida),
@@ -186,7 +185,6 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 				_descripcion: convertirCapitalize(data.descripcion),
 				_idmarca: marcaItemSelect.id,
 				_codigo: convertirCapitalize(data.codigo),
-				_preciocompra: parseFloat(data.preciocompra),
 				_id_categoria: categoriasItemSelect.id,
 				_id_empresa: dataempresa.id,
 				_unidad_medida: convertirCapitalize(data.unidad_medida),
@@ -363,24 +361,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 								)}
 							</InputText>
 						</article>
-						<article>
-							<InputText icono={<_v.iconopreciocompra />}>
-								<input
-									step="0.01"
-									className="form__field"
-									defaultValue={dataSelect.preciocompra}
-									type="number"
-									placeholder=""
-									{...register('preciocompra', {
-										required: true,
-									})}
-								/>
-								<label className="form__label">precio de compra</label>
-								{errors.preciocompra?.type === 'required' && (
-									<p>Campo requerido</p>
-								)}
-							</InputText>
-						</article>
+
 						<article>
 							<InputText icono={<_v.iconounidadmedida />}>
 								<input

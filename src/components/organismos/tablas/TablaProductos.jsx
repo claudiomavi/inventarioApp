@@ -104,18 +104,6 @@ export function TablaProductos({
 			),
 		},
 		{
-			accessorKey: 'preciocompra',
-			header: 'P. Compra',
-			cell: (info) => (
-				<td
-					data-title="P. Compra"
-					className="content-cell"
-				>
-					<span>{info.getValue()}</span>
-				</td>
-			),
-		},
-		{
 			accessorKey: 'categoria',
 			header: 'Categoria',
 			cell: (info) => (

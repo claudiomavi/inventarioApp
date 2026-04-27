@@ -189,11 +189,6 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 								<span className="colorNombre">
 									{colorSeleccionado?.color}
 								</span>
-								{colorSeleccionado?.precio != null && (
-									<span className="colorPrecio">
-										Precio: {colorSeleccionado.precio.toFixed(2)}
-									</span>
-								)}
 							</CardColorSeleccionado>
 						) : (
 							<>
@@ -226,11 +221,6 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 										<span className="colorNombre">
 											{colorSeleccionado.color}
 										</span>
-										{colorSeleccionado.precio != null && (
-											<span className="colorPrecio">
-												Precio: {colorSeleccionado.precio.toFixed(2)}
-											</span>
-										)}
 									</CardColorSeleccionado>
 								)}
 							</>
@@ -372,10 +362,7 @@ const CardColorSeleccionado = styled.div`
 		color: #1fee61;
 		font-weight: 700;
 	}
-	.colorPrecio {
-		color: ${({ theme }) => theme.text};
-		margin-left: auto;
-	}
+
 `
 
 const ContentTitle = styled.div`
