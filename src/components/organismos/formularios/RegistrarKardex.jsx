@@ -22,6 +22,7 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 	const [coloresProducto, setColoresProducto] = useState([])
 	const [colorSeleccionado, setColorSeleccionado] = useState(null)
 	const [cargandoColores, setCargandoColores] = useState(false)
+	const [buscadorColor, setBuscadorColor] = useState('')
 
 	const { insertarKardex, editarKardex } = useKardexStore()
 	const { dataempresa } = useEmpresaStore()
@@ -199,13 +200,17 @@ export function RegistrarKardex({ onClose, accion, dataSelect }) {
 										}
 									>
 										<Buscador
-											setBuscador={() => {}}
+											setBuscador={setBuscadorColor}
 											placeholderText="...buscar color"
 										/>
 									</div>
 									{stateListaColores && (
 										<ListaGenerica
-											data={coloresProducto}
+											data={coloresProducto.filter((c) =>
+												buscadorColor
+													? c.color.toLowerCase().includes(buscadorColor.toLowerCase())
+													: true
+											)}
 											setState={() =>
 												setStateListaColores(!stateListaColores)
 											}
