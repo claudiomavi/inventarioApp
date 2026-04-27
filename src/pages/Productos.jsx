@@ -5,6 +5,7 @@ import {
 	SpinnerLoader,
 	useCategoriasMerceologicasStore,
 	useCategoriasStore,
+	useColoresStore,
 	useEmpresaStore,
 	useMarcaStore,
 	useProductosStore,
@@ -18,6 +19,7 @@ export function Productos() {
 	const { mostrarCategorias } = useCategoriasStore()
 	const { mostrarCategoriasMerceologicas, datacategoriasmerceologicas } =
 		useCategoriasMerceologicasStore()
+	const { mostrarColores } = useColoresStore()
 	const { dataempresa } = useEmpresaStore()
 	const { datapermisos } = useUsuariosStore()
 
@@ -28,6 +30,12 @@ export function Productos() {
 	const { data: _datamarcas } = useQuery({
 		queryKey: ['mostrar marca', { id_empresa: dataempresa?.id }],
 		queryFn: () => mostrarMarca({ id_empresa: dataempresa?.id }),
+		enabled: dataempresa?.id != null,
+	})
+
+	const { data: _datacolores } = useQuery({
+		queryKey: ['mostrar colores', { id_empresa: dataempresa?.id }],
+		queryFn: () => mostrarColores({ id_empresa: dataempresa?.id }),
 		enabled: dataempresa?.id != null,
 	})
 
