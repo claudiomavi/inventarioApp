@@ -5,6 +5,7 @@ import {
 	useProductosStore,
 	useEmpresaStore,
 	convertirCapitalize,
+	Buscador,
 	ContainerSelector,
 	Selector,
 	useMarcaStore,
@@ -37,6 +38,7 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 	const [coloresAsignados, setColoresAsignados] = useState([])
 	const [precioColorTemp, setPrecioColorTemp] = useState('')
 	const [colorSeleccionadoTemp, setColorSeleccionadoTemp] = useState(null)
+	const [buscadorColor, setBuscadorColor] = useState('')
 
 	const { insertarProductos, editarProductos } = useProductosStore()
 	const { dataempresa } = useEmpresaStore()
@@ -222,9 +224,13 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 		setSubaccion('Nuevo')
 	}
 
-	const coloresDisponibles = datacolores?.filter(
-		(c) => !coloresAsignados.some((ca) => ca.id_color === c.id)
-	)
+	const coloresDisponibles = datacolores
+		?.filter((c) => !coloresAsignados.some((ca) => ca.id_color === c.id))
+		?.filter((c) =>
+			buscadorColor
+				? c.color.toLowerCase().includes(buscadorColor.toLowerCase())
+				: true
+		)
 
 	return (
 		<Container>
@@ -398,29 +404,32 @@ export function RegistrarProductos({ onClose, dataSelect, accion }) {
 						<h3>Colores disponibles</h3>
 						<div className="agregarColorContent">
 							<div className="colorSelectorWrapper">
-								<ContainerSelector>
-									<label>Color: </label>
-									<Selector
-										color="#fc6027"
-										texto2={colorSeleccionadoTemp?.color || 'Seleccionar'}
-										state={stateListaColores}
-										funcion={() =>
+								<div
+									className="contentBuscadorColor"
+									onClick={() => setStateListaColores(!stateListaColores)}
+								>
+									<Buscador
+										setBuscador={setBuscadorColor}
+										placeholderText="...buscar color"
+									/>
+								</div>
+								{stateListaColores && (
+									<ListaGenerica
+										bottom="-260px"
+										data={coloresDisponibles}
+										scroll="scroll"
+										setState={() =>
 											setStateListaColores(!stateListaColores)
 										}
+										funcion={seleccionarColorTemp}
+										colorType
 									/>
-									{stateListaColores && (
-										<ListaGenerica
-											bottom="-260px"
-											data={coloresDisponibles}
-											scroll="scroll"
-											setState={() =>
-												setStateListaColores(!stateListaColores)
-											}
-											funcion={seleccionarColorTemp}
-											colorType
-										/>
-									)}
-								</ContainerSelector>
+								)}
+								{colorSeleccionadoTemp && (
+									<span className="colorSeleccionadoLabel">
+										{colorSeleccionadoTemp.color}
+									</span>
+								)}
 							</div>
 							<div className="precioColorWrapper">
 								<InputText icono={<_v.iconopreciocompra />}>
@@ -576,6 +585,19 @@ const Container = styled.div`
 						flex: 1;
 						min-width: 150px;
 						position: relative;
+						.contentBuscadorColor {
+							position: relative;
+						}
+						.colorSeleccionadoLabel {
+							display: inline-block;
+							margin-top: 6px;
+							padding: 4px 10px;
+							border-radius: 8px;
+							background: rgba(84, 240, 79, 0.15);
+							color: #1fee61;
+							font-weight: 600;
+							font-size: 13px;
+						}
 					}
 					.precioColorWrapper {
 						width: 150px;
