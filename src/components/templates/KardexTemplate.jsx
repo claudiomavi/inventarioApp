@@ -22,6 +22,7 @@ export function KardexTemplate({ data }) {
 
 	const nuevaEntrada = () => {
 		setOpenRegistro(true)
+		setAccion('Nuevo')
 	}
 
 	return (
